@@ -1,0 +1,27 @@
+.App{
+  display: flex;
+  flex-direction: column;
+}
+.App-header{
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+.App-header-links{
+  display: flex;
+}
+.App-main{
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.App-main-main{
+  width: 95%;
+  height: 95%;
+  background-color: white;
+}
+.App-footer {
+  text-align: center;
+}

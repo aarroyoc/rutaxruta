@@ -1,0 +1,13 @@
+# Use this file to test all components
+# Production uses:
+# - MongoDB Atlas
+# - Frontend at Netlify
+# - Backend at IBM Cloud / Heroku
+version: "3.6"
+services:
+  mongo:
+    image: mongo:4.4.5
+    ports:
+      - 27017:27017
+  frontend:
+  backend:
