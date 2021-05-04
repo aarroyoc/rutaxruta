@@ -43,8 +43,11 @@ fun Route.routeRouting() {
                         media = emptyList(),
                         points = convertGeoJsonToPoints(request.geojson),
                         author = User(
-                            nickname = "aarroyoc",
-                            email = "adrian.arroyocalle@gmail.com"
+                            id = null,
+                            name = "TODO",
+                            picture = "TODO",
+                            type = "google",
+                            providerId = "TODO",
                         )
                     )
                 )?.let {

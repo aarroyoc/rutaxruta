@@ -25,8 +25,11 @@ class RouteRepository (){
         Route(
             id = this._id,
             author = User(
-                nickname = "TODO",
-                email = "TODO"
+                id = null,
+                type = "google",
+                providerId = "TODO",
+                name = "TODO",
+                picture = "TODO"
             ),
             points = this.points.coordinates.map { coordinates ->
                 RoutePoint(coordinates[1], coordinates[0])

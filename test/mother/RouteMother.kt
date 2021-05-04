@@ -14,8 +14,11 @@ object RouteMother {
             description = "Vamos de Valladolid a Cigales siguiendo el Canal de Castilla<br>Pasamos al lado del ITaCyl",
             comments = emptyList(),
             author = User(
-                nickname = "fake",
-                email ="fake@faking.com"
+                id = null,
+                type = "google",
+                providerId = "111111111122222234444070",
+                name = "Cubero",
+                picture = ""
             ),
             media = emptyList(),
             points = listOf(

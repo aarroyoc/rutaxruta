@@ -1,9 +1,9 @@
-package eu.adrianistan.model
+package eu.adrianistan.user.entities
 
-data class User(
-    val id: String?,
+data class UserEntity(
+    val _id: String?,
     val type: String,
     val providerId: String,
     val name: String,
     val picture: String,
-) : io.ktor.auth.Principal
+)
