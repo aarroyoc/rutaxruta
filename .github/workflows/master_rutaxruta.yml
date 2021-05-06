@@ -50,4 +50,4 @@ jobs:
         app-name: 'rutaxruta'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_819bdc9dbf8f4a95be967458347cb51a }}
-        package: '*.jar'
+        package: '*dependencies.jar'
