@@ -10,7 +10,7 @@
         <logback_version>1.2.1</logback_version>
         <ktor_version>1.5.4</ktor_version>
         <kotlin.code.style>official</kotlin.code.style>
-        <kotlin_version>1.4.32</kotlin_version>
+        <kotlin_version>1.5.0</kotlin_version>
         <serialization.version>1.2.0</serialization.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
@@ -141,7 +141,7 @@
                 <groupId>org.jetbrains.kotlin</groupId>
                 <version>${kotlin_version}</version>
                 <configuration>
-                    <jvmTarget>1.8</jvmTarget>
+                    <jvmTarget>11</jvmTarget>
                     <compilerPlugins>
                         <plugin>kotlinx-serialization</plugin>
                     </compilerPlugins>

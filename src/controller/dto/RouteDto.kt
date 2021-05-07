@@ -1,7 +1,9 @@
 package eu.adrianistan.controller.dto
 
 import eu.adrianistan.model.Route
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class RouteDto(
     val id: String,
     val name: String,
@@ -25,6 +27,6 @@ fun Route.toDto(): RouteDto =
                     arrayOf(point.lon, point.lat)
                 }
             ),
-            properties = emptyMap<Any, Any>()
+            properties = emptyMap<String, String>()
         )
     )

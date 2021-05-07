@@ -1,5 +1,8 @@
 package eu.adrianistan.user.entities
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class UserEntity(
     val _id: String?,
     val type: String,

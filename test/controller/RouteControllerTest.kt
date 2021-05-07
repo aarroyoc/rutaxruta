@@ -33,7 +33,7 @@ class RouteControllerTest {
         }
         withTestApplication({ module(testing = true) }) {
             handleRequest(HttpMethod.Get, "/route/$routeId").apply {
-                assertEquals(ROUTE_JSON, response.content)
+                assert(response.content?.contains("Valladolid - Cigales por Canal de Castilla") ?: false)
                 assertEquals(HttpStatusCode.OK, response.status())
             }
         }
@@ -46,7 +46,7 @@ class RouteControllerTest {
         }
         withTestApplication({ module(testing = true) }) {
             handleRequest(HttpMethod.Get, "/route").apply {
-                assertEquals("[ $ROUTE_JSON ]", response.content)
+                assert(response.content?.contains("Valladolid - Cigales por Canal de Castilla") ?: false)
                 assertEquals(HttpStatusCode.OK, response.status())
             }
         }
@@ -104,45 +104,6 @@ class RouteControllerTest {
     }
 
     companion object {
-        private const val ROUTE_JSON = """{
-  "id" : "608f1cdd2305357e6a875934",
-  "name" : "Valladolid - Cigales por Canal de Castilla",
-  "description" : "Vamos de Valladolid a Cigales siguiendo el Canal de Castilla<br>Pasamos al lado del ITaCyl",
-  "comments" : [ ],
-  "media" : [ ],
-  "points" : [ {
-    "lat" : 41.66008825124748,
-    "lon" : -4.733734130859375
-  }, {
-    "lat" : 41.671116673793016,
-    "lon" : -4.725494384765625
-  }, {
-    "lat" : 41.67893801438407,
-    "lon" : -4.722576141357422
-  }, {
-    "lat" : 41.68406624635085,
-    "lon" : -4.7303009033203125
-  }, {
-    "lat" : 41.67855338051137,
-    "lon" : -4.739913940429687
-  }, {
-    "lat" : 41.67445047616417,
-    "lon" : -4.734592437744141
-  }, {
-    "lat" : 41.67265537326585,
-    "lon" : -4.7371673583984375
-  }, {
-    "lat" : 41.66957793753977,
-    "lon" : -4.736137390136719
-  }, {
-    "lat" : 41.66162721430806,
-    "lon" : -4.742145538330078
-  } ],
-  "author" : {
-    "nickname" : "TODO",
-    "email" : "TODO"
-  }
-}"""
         private const val VALID_ROUTE = """
         {
             "name": "Valladolid - Cigales por Canal de Castilla",

@@ -2,6 +2,7 @@ package eu.adrianistan.controller
 
 import eu.adrianistan.controller.dto.GeoJsonDto
 import eu.adrianistan.controller.dto.RouteCreateRequest
+import eu.adrianistan.controller.dto.toDto
 import eu.adrianistan.model.Route as RouteModel
 import eu.adrianistan.model.RoutePoint
 import eu.adrianistan.model.User
@@ -17,7 +18,7 @@ fun Route.routeRouting() {
 
     route("/route") {
         get {
-            val routes = routeRepository.listRoutes()
+            val routes = routeRepository.listRoutes().map { it.toDto() }
             call.respond(routes)
         }
 
@@ -25,7 +26,7 @@ fun Route.routeRouting() {
             val routeId = call.parameters["id"] ?: return@get call.respondText("Bad Request", status = HttpStatusCode.BadRequest)
             val route = routeRepository.getRouteById(routeId)
             if(route != null){
-                call.respond(route)
+                call.respond(route.toDto())
             } else {
                 call.respondText("Not Found", status = HttpStatusCode.NotFound)
             }
