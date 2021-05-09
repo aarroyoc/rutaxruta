@@ -9,7 +9,6 @@ import io.ktor.client.engine.apache.*
 import io.ktor.routing.*
 import io.ktor.http.*
 import io.ktor.auth.*
-import eu.adrianistan.config.OAuth
 import eu.adrianistan.controller.authRouting
 import eu.adrianistan.controller.routeRouting
 import eu.adrianistan.controller.userRouting
@@ -23,9 +22,6 @@ import io.ktor.client.features.json.serializer.KotlinxSerializer
 
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
-
-@Location("/login/google")
-class Login()
 
 @Suppress("unused") // Referenced in application.conf
 @kotlin.jvm.JvmOverloads
@@ -50,13 +46,6 @@ fun Application.module(testing: Boolean = false) {
                 }
             }
         }
-        oauth("google") {
-            client = httpClient
-            providerLookup = {
-                OAuth.google
-            }
-            urlProvider = { p -> redirectUrl(Login(), false) }
-        }
     }
 
     install(ContentNegotiation) {
@@ -80,12 +69,3 @@ fun Application.module(testing: Boolean = false) {
         userRouting()
     }
 }
-
-private fun <T : Any> ApplicationCall.redirectUrl(t: T, secure: Boolean = true): String {
-    val protocol = when {
-        secure -> "https"
-        else -> "http"
-    }
-    return "$protocol://${request.host()}:${request.port()}${application.locations.href(t)}"
-}
-

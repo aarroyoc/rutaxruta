@@ -1,5 +1,5 @@
 import { Spinner, SpinnerSize, Text } from "@fluentui/react";
-import { MapContainer, GeoJSON, WMSTileLayer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, GeoJSON, WMSTileLayer } from "react-leaflet";
 import { useEffect, useState } from "react";
 import Route from "../models/Route";
 import { ApiService } from "../services/ApiService";
@@ -17,7 +17,7 @@ export function RouteView({id}: Props){
         apiService.getRoute(id).then(newRoute => {
             setRoute(newRoute);
         });
-    }, []);
+    });
     const routeBounds = () => {
         if(route){
             return route.geojson.geometry.coordinates.map((t: number[]) => [t[1], t[0]]);

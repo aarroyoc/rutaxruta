@@ -5,7 +5,3 @@ setup-ci:
 .PHONY: exit-ci
 exit-ci:
 	docker-compose down
-
-.PHONY: deploy
-deploy:
-	echo "TODO"

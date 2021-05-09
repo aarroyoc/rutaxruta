@@ -6,3 +6,6 @@
 *.ipr
 *.iws
 target
+
+# Local Netlify folder
+.netlify

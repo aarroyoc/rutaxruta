@@ -1,10 +1,21 @@
 import React from 'react';
-import { Link, PrimaryButton } from '@fluentui/react';
+import { Link } from '@fluentui/react';
 import './App.css';
 
 import { RouteView } from "./route/RouteView"
+import GoogleLogin from 'react-google-login';
+import { ApiService } from './services/ApiService';
 
 function App() {
+
+  const apiService = new ApiService();
+
+  const handleLogin = async (googleData: any) => {
+    const jwt = await apiService.getToken(googleData.tokenId);
+    apiService.setJwt(jwt);
+    console.log(jwt);
+  }
+
   return (
     <div className="App">
       <header className="App-header">
@@ -15,7 +26,13 @@ function App() {
           <Link href="">Crea tu ruta</Link>
         </nav>
         <nav>
-          <PrimaryButton text="Iniciar sesión" onClick={() => alert("Click")}/>
+          <GoogleLogin
+            clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID || ""}
+            buttonText="Iniciar sesión"
+            onSuccess={handleLogin}
+            onFailure={handleLogin}
+            cookiePolicy={"single_host_origin"}
+            />
         </nav>
       </header>
       <div className="App-main" style={{ backgroundImage: `url(${process.env.PUBLIC_URL + '/background.jpg'})` }}>
