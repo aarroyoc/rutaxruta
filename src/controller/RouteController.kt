@@ -6,8 +6,10 @@ import eu.adrianistan.controller.dto.toDto
 import eu.adrianistan.model.Route as RouteModel
 import eu.adrianistan.model.RoutePoint
 import eu.adrianistan.model.User
+import eu.adrianistan.poi.PoiRepository
 import eu.adrianistan.route.RouteRepository
 import io.ktor.application.*
+import io.ktor.auth.*
 import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
@@ -15,6 +17,7 @@ import io.ktor.routing.*
 
 fun Route.routeRouting() {
     val routeRepository = RouteRepository()
+    val poiRepository = PoiRepository()
 
     route("/route") {
         get {
@@ -32,39 +35,58 @@ fun Route.routeRouting() {
             }
         }
 
-        post {
-            try {
-                val request = call.receive<RouteCreateRequest>()
-                routeRepository.saveRoute(
-                    RouteModel(
-                        id = null,
-                        name = request.name,
-                        description = request.description,
-                        comments = emptyList(),
-                        media = emptyList(),
-                        points = convertGeoJsonToPoints(request.geojson),
-                        author = User(
-                            id = null,
-                            name = "TODO",
-                            picture = "TODO",
-                            type = "google",
-                            providerId = "TODO",
-                        )
-                    )
-                )?.let {
-                    call.respondText(it, status = HttpStatusCode.Created)
-                } ?: call.respondText("Server Error", status = HttpStatusCode.InternalServerError)
-            } catch (e: Exception) {
-                call.respondText("Bad Request", status = HttpStatusCode.BadRequest)
+        get("{id}/near") {
+            val routeId = call.parameters["id"] ?: return@get call.respondText("Bad Request", status = HttpStatusCode.BadRequest)
+            val route = routeRepository.getRouteById(routeId)
+            if(route != null){
+                val pois = route.points.map {
+                    poiRepository.listNearPois(it)
+                }.distinct().toList()
+                call.respond(pois)
+            } else {
+                call.respondText("Not Found", status = HttpStatusCode.NotFound)
             }
         }
 
-        delete("{id}") {
-            val routeId = call.parameters["id"] ?: return@delete call.respondText("Bad Request", status = HttpStatusCode.BadRequest)
-            if(routeRepository.deleteRoute(routeId)){
-                call.respond(HttpStatusCode.NoContent)
-            } else {
-                call.respondText("Nout Found", status = HttpStatusCode.NotFound)
+        authenticate {
+
+            post {
+                try {
+                    val request = call.receive<RouteCreateRequest>()
+                    routeRepository.saveRoute(
+                        RouteModel(
+                            id = null,
+                            name = request.name,
+                            description = request.description,
+                            comments = emptyList(),
+                            media = emptyList(),
+                            points = convertGeoJsonToPoints(request.geojson),
+                            author = User(
+                                id = null,
+                                name = "TODO",
+                                picture = "TODO",
+                                type = "google",
+                                providerId = "TODO",
+                            )
+                        )
+                    )?.let {
+                        call.respondText(it, status = HttpStatusCode.Created)
+                    } ?: call.respondText("Server Error", status = HttpStatusCode.InternalServerError)
+                } catch (e: Exception) {
+                    call.respondText("Bad Request", status = HttpStatusCode.BadRequest)
+                }
+            }
+
+            delete("{id}") {
+                val routeId = call.parameters["id"] ?: return@delete call.respondText(
+                    "Bad Request",
+                    status = HttpStatusCode.BadRequest
+                )
+                if (routeRepository.deleteRoute(routeId)) {
+                    call.respond(HttpStatusCode.NoContent)
+                } else {
+                    call.respondText("Nout Found", status = HttpStatusCode.NotFound)
+                }
             }
         }
     }

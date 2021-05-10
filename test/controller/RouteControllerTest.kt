@@ -2,19 +2,25 @@ package controller
 
 import io.ktor.http.*
 import eu.adrianistan.Factory
+import eu.adrianistan.config.JwtConfig
+import eu.adrianistan.model.User
 import eu.adrianistan.module
 import eu.adrianistan.route.entities.RouteEntity
+import eu.adrianistan.user.entities.UserEntity
 import kotlin.test.*
 import io.ktor.server.testing.*
 import kotlinx.coroutines.runBlocking
 import mother.RouteMother
+import mother.UserMother
 import org.litote.kmongo.*
+import org.litote.kmongo.util.idValue
 
 class RouteControllerTest {
     @AfterTest
     fun cleanDatabase() {
         runBlocking {
             Factory.getDatabase().dropCollection("route")
+            Factory.getDatabase().dropCollection("user")
         }
     }
     @Test
@@ -54,9 +60,13 @@ class RouteControllerTest {
 
     @Test
     fun `should successfully post a new route`() {
+        val token = runBlocking {
+            generateToken()
+        }
         withTestApplication({ module(testing = true) }) {
             handleRequest(HttpMethod.Post, "/route") {
                 addHeader(HttpHeaders.ContentType, ContentType.Application.Json.toString())
+                addHeader(HttpHeaders.Authorization, "Bearer $token")
                 setBody(VALID_ROUTE)
             }.apply {
                 assertEquals(HttpStatusCode.Created, response.status())
@@ -66,9 +76,13 @@ class RouteControllerTest {
 
     @Test
     fun `should reject the new route as invalid`() {
+        val token = runBlocking {
+            generateToken()
+        }
         withTestApplication({ module(testing = true) }) {
             handleRequest(HttpMethod.Post, "/route") {
                 addHeader(HttpHeaders.ContentType, ContentType.Application.Json.toString())
+                addHeader(HttpHeaders.Authorization, "Bearer $token")
                 setBody(INVALID_ROUTE)
             }.apply {
                 assertEquals(HttpStatusCode.BadRequest, response.status())
@@ -81,8 +95,13 @@ class RouteControllerTest {
         val routeId = runBlocking {
             saveRoute()
         }
+        val token = runBlocking {
+            generateToken()
+        }
         withTestApplication({ module(testing = true) }) {
-            handleRequest(HttpMethod.Delete, "/route/$routeId").apply {
+            handleRequest(HttpMethod.Delete, "/route/$routeId") {
+                addHeader(HttpHeaders.Authorization, "Bearer $token")
+            }.apply {
                 assertEquals(HttpStatusCode.NoContent, response.status())
             }
         }
@@ -90,8 +109,13 @@ class RouteControllerTest {
 
     @Test
     fun `should give an error when deleting a non-existing route`() {
+        val token = runBlocking {
+            generateToken()
+        }
         withTestApplication({ module(testing = true) }) {
-            handleRequest(HttpMethod.Delete, "/route/123456").apply {
+            handleRequest(HttpMethod.Delete, "/route/123456") {
+                addHeader(HttpHeaders.Authorization, "Bearer $token")
+            }.apply {
                 assertEquals(HttpStatusCode.NotFound, response.status())
             }
         }
@@ -101,6 +125,12 @@ class RouteControllerTest {
         val collection = Factory.getDatabase().getCollection<RouteEntity>("route")
         collection.insertOne(RouteMother.buildEntity().copy(_id = "608f1cdd2305357e6a875934"))
         return collection.find().first()?._id
+    }
+
+    private suspend fun generateToken(): String {
+        val collection = Factory.getDatabase().getCollection<UserEntity>("user")
+        collection.insertOne(UserMother.buildEntity())
+        return JwtConfig.makeToken(UserMother.build())
     }
 
     companion object {

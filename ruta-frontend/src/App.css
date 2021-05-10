@@ -25,3 +25,10 @@
 .App-footer {
   text-align: center;
 }
+.username {
+  display: flex;
+  align-items: center;
+}
+.username > p {
+  margin-right: 20px;
+}

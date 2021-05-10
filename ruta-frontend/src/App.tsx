@@ -38,9 +38,9 @@ function App() {
             cookiePolicy={"single_host_origin"}
             />
           }
-          {user !== null && <div>
+          {user !== null && <div className="username">
             <p>{user.name}</p>
-            <img alt="" src={user.picture}/>
+            <img width="32" height="32" alt="" src={user.picture}/>
           </div>}
         </nav>
       </header>

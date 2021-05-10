@@ -1,8 +1,9 @@
 package eu.adrianistan.model
 
-data class InterestPoint(
+data class Poi(
     val type: InterestPointType,
     val name: String,
+    val description: String,
     val lat: Double,
     val lon: Double,
 ) {
