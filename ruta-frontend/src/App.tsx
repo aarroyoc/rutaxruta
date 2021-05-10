@@ -40,7 +40,7 @@ function App() {
           }
           {user !== null && <div>
             <p>{user.name}</p>
-            <img src={user.picture}/>
+            <img alt="" src={user.picture}/>
           </div>}
         </nav>
       </header>
