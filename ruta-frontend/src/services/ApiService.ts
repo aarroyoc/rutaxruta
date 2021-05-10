@@ -6,6 +6,7 @@ export class ApiService{
 
     setJwt(newJwt: string) {
         this.jwt = newJwt;
+        localStorage.setItem("jwt", this.jwt);
     }
 
     getToken(googleToken: string): Promise<string> {
