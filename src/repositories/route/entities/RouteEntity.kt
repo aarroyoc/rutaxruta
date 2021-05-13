@@ -1,5 +1,6 @@
-package eu.adrianistan.route.entities
+package eu.adrianistan.repositories.route.entities
 
+import eu.adrianistan.route.entities.GeoJsonLineString
 import kotlinx.serialization.Serializable
 
 @Serializable

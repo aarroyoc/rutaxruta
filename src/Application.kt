@@ -2,8 +2,6 @@ package eu.adrianistan
 
 import eu.adrianistan.config.JwtConfig
 import io.ktor.application.*
-import io.ktor.response.*
-import io.ktor.request.*
 import io.ktor.client.*
 import io.ktor.client.engine.apache.*
 import io.ktor.routing.*
@@ -12,7 +10,7 @@ import io.ktor.auth.*
 import eu.adrianistan.controller.authRouting
 import eu.adrianistan.controller.routeRouting
 import eu.adrianistan.controller.userRouting
-import eu.adrianistan.user.UserRepository
+import eu.adrianistan.repositories.user.UserRepository
 import io.ktor.auth.jwt.*
 import io.ktor.client.features.json.*
 import io.ktor.features.*

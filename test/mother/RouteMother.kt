@@ -4,12 +4,13 @@ import eu.adrianistan.model.Route
 import eu.adrianistan.model.RoutePoint
 import eu.adrianistan.model.User
 import eu.adrianistan.route.entities.GeoJsonLineString
-import eu.adrianistan.route.entities.RouteEntity
+import eu.adrianistan.repositories.route.entities.RouteEntity
 
 object RouteMother {
+    const val SOME_ROUTE_ID = "1235678"
     fun build(): Route =
         Route(
-            id = "123456789",
+            id = SOME_ROUTE_ID,
             name = "Valladolid - Cigales por Canal de Castilla",
             description = "Vamos de Valladolid a Cigales siguiendo el Canal de Castilla<br>Pasamos al lado del ITaCyl",
             comments = emptyList(),

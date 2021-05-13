@@ -1,16 +1,22 @@
-package eu.adrianistan.poi
+package eu.adrianistan.repositories.poi
 
-import com.mongodb.client.model.Filters.geoWithinCenter
+import com.mongodb.client.model.Filters.*
 import eu.adrianistan.Factory
 import eu.adrianistan.model.Poi
-import eu.adrianistan.model.RoutePoint
-import eu.adrianistan.poi.entities.PoiEntity
+import eu.adrianistan.repositories.poi.entities.PoiEntity
+import org.locationtech.jts.geom.Geometry
 
 class PoiRepository {
     private val collection = Factory.getDatabase().getCollection<PoiEntity>("poi")
 
-    suspend fun listNearPois(coordinates: RoutePoint) =
-        collection.findOne(geoWithinCenter("location", coordinates.lon, coordinates.lat, 50.0))
+    suspend fun listNearPois(geometry: Geometry): List<Poi> =
+        geometry.coordinates.map {
+            listOf(it.x, it.y)
+        }.let {
+            collection.find(geoWithinPolygon("location", it)).toList().map { poiEntity ->
+                poiEntity.toModel()
+            }
+        }
 
     suspend fun getPoi(id: String) =
         collection.findOneById(id)?.toModel()

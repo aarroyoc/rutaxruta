@@ -1,7 +1,7 @@
 package mother
 
 import eu.adrianistan.model.User
-import eu.adrianistan.user.entities.UserEntity
+import eu.adrianistan.repositories.user.entities.UserEntity
 
 object UserMother {
     fun build() =

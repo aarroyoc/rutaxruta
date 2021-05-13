@@ -1,13 +1,15 @@
 package eu.adrianistan.controller
 
 import eu.adrianistan.controller.dto.GeoJsonDto
+import eu.adrianistan.controller.dto.PoiDto
 import eu.adrianistan.controller.dto.RouteCreateRequest
 import eu.adrianistan.controller.dto.toDto
 import eu.adrianistan.model.Route as RouteModel
 import eu.adrianistan.model.RoutePoint
 import eu.adrianistan.model.User
-import eu.adrianistan.poi.PoiRepository
+import eu.adrianistan.repositories.poi.PoiRepository
 import eu.adrianistan.route.RouteRepository
+import eu.adrianistan.usecase.GetPoisNearRoute
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.http.*
@@ -18,6 +20,8 @@ import io.ktor.routing.*
 fun Route.routeRouting() {
     val routeRepository = RouteRepository()
     val poiRepository = PoiRepository()
+
+    val getPoisNearRoute = GetPoisNearRoute(routeRepository, poiRepository)
 
     route("/route") {
         get {
@@ -37,13 +41,12 @@ fun Route.routeRouting() {
 
         get("{id}/near") {
             val routeId = call.parameters["id"] ?: return@get call.respondText("Bad Request", status = HttpStatusCode.BadRequest)
-            val route = routeRepository.getRouteById(routeId)
-            if(route != null){
-                val pois = route.points.map {
-                    poiRepository.listNearPois(it)
-                }.distinct().toList()
-                call.respond(pois)
-            } else {
+            getPoisNearRoute(routeId)?.let { pois ->
+                val poisDto = pois.map {
+                    PoiDto.fromModel(it)
+                }
+                call.respond(poisDto)
+            } ?: run {
                 call.respondText("Not Found", status = HttpStatusCode.NotFound)
             }
         }

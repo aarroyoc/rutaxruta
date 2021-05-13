@@ -12,6 +12,7 @@
         <kotlin.code.style>official</kotlin.code.style>
         <kotlin_version>1.5.0</kotlin_version>
         <serialization.version>1.2.0</serialization.version>
+        <jts.version>1.16.1</jts.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
         <main.class>io.ktor.server.netty.EngineMain</main.class>
@@ -120,6 +121,17 @@
             <groupId>org.jetbrains.kotlinx</groupId>
             <artifactId>kotlinx-serialization-json</artifactId>
             <version>${serialization.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.locationtech.jts</groupId>
+            <artifactId>jts-core</artifactId>
+            <version>${jts.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.mockk</groupId>
+            <artifactId>mockk</artifactId>
+            <version>1.10.6</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
     <build>

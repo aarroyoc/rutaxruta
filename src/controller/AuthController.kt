@@ -1,21 +1,14 @@
 package eu.adrianistan.controller
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier
-import com.google.api.client.http.HttpTransport
 import com.google.api.client.http.javanet.NetHttpTransport
-import com.google.api.client.json.JsonFactory
 import com.google.api.client.json.gson.GsonFactory
 import eu.adrianistan.config.JwtConfig
 import eu.adrianistan.config.Settings
-import eu.adrianistan.controller.dto.google.UserInfo
 import eu.adrianistan.model.User
-import eu.adrianistan.user.UserRepository
+import eu.adrianistan.repositories.user.UserRepository
 import io.ktor.application.*
-import io.ktor.auth.*
 import io.ktor.client.*
-import io.ktor.client.request.*
-import io.ktor.http.*
-import io.ktor.locations.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*

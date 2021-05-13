@@ -3,17 +3,16 @@ package controller
 import io.ktor.http.*
 import eu.adrianistan.Factory
 import eu.adrianistan.config.JwtConfig
-import eu.adrianistan.model.User
 import eu.adrianistan.module
-import eu.adrianistan.route.entities.RouteEntity
-import eu.adrianistan.user.entities.UserEntity
+import eu.adrianistan.repositories.poi.entities.PoiEntity
+import eu.adrianistan.repositories.route.entities.RouteEntity
+import eu.adrianistan.repositories.user.entities.UserEntity
 import kotlin.test.*
 import io.ktor.server.testing.*
 import kotlinx.coroutines.runBlocking
+import mother.PoiMother
 import mother.RouteMother
 import mother.UserMother
-import org.litote.kmongo.*
-import org.litote.kmongo.util.idValue
 
 class RouteControllerTest {
     @AfterTest
@@ -21,6 +20,7 @@ class RouteControllerTest {
         runBlocking {
             Factory.getDatabase().dropCollection("route")
             Factory.getDatabase().dropCollection("user")
+            Factory.getDatabase().dropCollection("poi")
         }
     }
     @Test
@@ -121,9 +121,66 @@ class RouteControllerTest {
         }
     }
 
+    @Test
+    fun `should return a list of near pois`() {
+        val routeId = runBlocking {
+            savePoi()
+            saveRoute()
+        }
+        val token = runBlocking {
+            generateToken()
+        }
+        withTestApplication({ module(testing = true) }) {
+            handleRequest(HttpMethod.Get, "/route/$routeId/near") {
+                addHeader(HttpHeaders.Authorization, "Bearer $token")
+            }.apply {
+                assertEquals(HttpStatusCode.OK, response.status())
+                assert(response.content?.contains("Monumento 1") ?: false)
+            }
+        }
+    }
+
+    @Test
+    fun `should return an empty list of near pois`() {
+        val routeId = runBlocking {
+            saveRoute()
+        }
+        val token = runBlocking {
+            generateToken()
+        }
+        withTestApplication({ module(testing = true) }) {
+            handleRequest(HttpMethod.Get, "/route/$routeId/near") {
+                addHeader(HttpHeaders.Authorization, "Bearer $token")
+            }.apply {
+                assertEquals(HttpStatusCode.OK, response.status())
+                assertEquals(response.content, "[]")
+            }
+        }
+    }
+
+    @Test
+    fun `should return 404 if route doesn't exist while looking for pois`() {
+        val token = runBlocking {
+            generateToken()
+        }
+        withTestApplication({ module(testing = true) }) {
+            handleRequest(HttpMethod.Get, "/route/123456/near") {
+                addHeader(HttpHeaders.Authorization, "Bearer $token")
+            }.apply {
+                assertEquals(HttpStatusCode.NotFound, response.status())
+            }
+        }
+    }
+
     private suspend fun saveRoute(): String? {
         val collection = Factory.getDatabase().getCollection<RouteEntity>("route")
         collection.insertOne(RouteMother.buildEntity().copy(_id = "608f1cdd2305357e6a875934"))
+        return collection.find().first()?._id
+    }
+
+    private suspend fun savePoi(): String? {
+        val collection = Factory.getDatabase().getCollection<PoiEntity>("poi")
+        collection.insertOne(PoiMother.buildEntity())
         return collection.find().first()?._id
     }
 

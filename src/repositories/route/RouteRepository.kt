@@ -1,13 +1,11 @@
 package eu.adrianistan.route
 
-import com.mongodb.client.model.InsertOneOptions
 import eu.adrianistan.Factory
 import eu.adrianistan.model.Route
 import eu.adrianistan.model.RoutePoint
 import eu.adrianistan.model.User
 import eu.adrianistan.route.entities.GeoJsonLineString
-import eu.adrianistan.route.entities.RouteEntity
-import org.litote.kmongo.util.idValue
+import eu.adrianistan.repositories.route.entities.RouteEntity
 
 class RouteRepository (){
     private val collection = Factory.getDatabase().getCollection<RouteEntity>("route")

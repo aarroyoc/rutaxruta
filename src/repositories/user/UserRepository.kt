@@ -1,10 +1,9 @@
-package eu.adrianistan.user
+package eu.adrianistan.repositories.user
 
 import eu.adrianistan.Factory
 import eu.adrianistan.model.User
-import eu.adrianistan.user.entities.UserEntity
+import eu.adrianistan.repositories.user.entities.UserEntity
 import org.litote.kmongo.eq
-import org.litote.kmongo.upsert
 
 class UserRepository {
     private val collection = Factory.getDatabase().getCollection<UserEntity>("user")

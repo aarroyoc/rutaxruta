@@ -1,5 +1,6 @@
-package eu.adrianistan.poi.entities
+package eu.adrianistan.repositories.poi.entities
 
+import eu.adrianistan.poi.entities.GeoJsonPoint
 import kotlinx.serialization.Serializable
 
 @Serializable

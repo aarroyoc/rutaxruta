@@ -1,4 +1,4 @@
-package eu.adrianistan.user.entities
+package eu.adrianistan.repositories.user.entities
 
 import kotlinx.serialization.Serializable
 

@@ -2,7 +2,7 @@ package eu.adrianistan.controller
 
 import eu.adrianistan.controller.dto.toDto
 import eu.adrianistan.model.User
-import eu.adrianistan.user.UserRepository
+import eu.adrianistan.repositories.user.UserRepository
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.http.*
