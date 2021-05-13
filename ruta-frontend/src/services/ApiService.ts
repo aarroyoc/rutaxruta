@@ -1,3 +1,4 @@
+import Poi from "../models/Poi";
 import Route from "../models/Route";
 import User from "../models/User";
 
@@ -23,6 +24,16 @@ export class ApiService{
     getRoute(id: string): Promise<Route> {
         return fetch(`${this.baseUrl}/route/${id}`)
         .then(t => t.json());
+    }
+
+    getRouteNearPois(id: string): Promise<Poi[]> {
+        return fetch(`${this.baseUrl}/route/${id}/near`)
+        .then(t => t.json());
+    }
+
+    listRoutes(): Promise<Array<Route>> {
+        return fetch(`${this.baseUrl}/route`)
+        .then(t => t.json())
     }
 
 }

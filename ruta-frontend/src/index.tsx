@@ -3,6 +3,10 @@ import ReactDOM from 'react-dom';
 import { ThemeProvider, PartialTheme } from '@fluentui/react/lib/Theme';
 import './index.css';
 import App from './App';
+import { BrowserRouter } from 'react-router-dom';
+import { initializeIcons } from '@fluentui/font-icons-mdl2';
+
+initializeIcons();
 
 const theme: PartialTheme = {
   palette: {
@@ -33,7 +37,9 @@ const theme: PartialTheme = {
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-      <App />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </ThemeProvider>
   </React.StrictMode>,
   document.getElementById('root')

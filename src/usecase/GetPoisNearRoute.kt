@@ -20,7 +20,7 @@ class GetPoisNearRoute(
                 }.toTypedArray()
                 val geometry = GeometryFactory()
                     .createLineString(coordinates)
-                val polygon = BufferOp.bufferOp(geometry, 0.1)
+                val polygon = BufferOp.bufferOp(geometry, 0.01)
                 poiRepository.listNearPois(polygon)
             }
 }

@@ -1,0 +1,27 @@
+.routeView{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.routeViewData {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 3rem 200px 3rem 200px 3rem 200px 3rem 200px;
+}
+
+.routeViewData > h3 {
+    color: #994b0b;
+}
+.commentsArea {
+    grid-row: 6;
+    grid-column-start: 1;
+    grid-column-end: 3;
+    background-color: red;
+}
+
+.imagesArea {
+    grid-row: 8;
+    grid-column-start: 1;
+    grid-column-end: 3;
+    background-color: green;
+}

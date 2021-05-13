@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class PoiDto(
+    val type: String,
     val name: String,
     val description: String,
     val lat: Double,
@@ -13,6 +14,7 @@ data class PoiDto(
     companion object {
         fun fromModel(poi: Poi) =
             PoiDto(
+                type = poi.type.value,
                 name = poi.name,
                 description = poi.description,
                 lat = poi.lat,
