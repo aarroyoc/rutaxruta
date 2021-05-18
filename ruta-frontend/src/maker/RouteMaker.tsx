@@ -79,7 +79,7 @@ export default function RouteMaker({apiService, user}: Props) {
                 {user === null && (
                 <h3>Debes iniciar sesión para crear rutas</h3>
                 )}
-                {user === null && (
+                {user !== null && (
                     <div className="makerEditor">
                         <div>
                             <MapContainer bounds={cylBounds()} scrollWheelZoom={true} style={{width: "500px", height: "500px"}}>
