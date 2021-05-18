@@ -8,6 +8,7 @@ import User from './models/User';
 
 import './App.css';
 import { RouteListView } from './route/RouteListView';
+import RouteMaker from './maker/RouteMaker';
 
 function App() {
   const apiService = new ApiService();
@@ -27,7 +28,7 @@ function App() {
         <nav className="App-header-links">
           <Link href="/">Catálogo de rutas</Link>
           <Link href="">Viajes de los usuarios</Link>
-          <Link href="">Crea tu ruta</Link>
+          <Link href="/maker/">Crea tu ruta</Link>
         </nav>
         <nav>
           {user === null && 
@@ -48,6 +49,9 @@ function App() {
       <div className="App-main" style={{ backgroundImage: `url(${process.env.PUBLIC_URL + '/background.jpg'})` }}>
         <main className="App-main-main">
           <Switch>
+            <Route path="/maker/">
+              <RouteMaker apiService={apiService} user={user}/>
+            </Route>
             <Route path="/route/:id">
               <RouteListView apiService={apiService}/>
             </Route>

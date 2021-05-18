@@ -1,3 +1,4 @@
+import CreateRouteRequest from "../models/CreateRouteRequest";
 import Poi from "../models/Poi";
 import Route from "../models/Route";
 import User from "../models/User";
@@ -34,6 +35,16 @@ export class ApiService{
     listRoutes(): Promise<Array<Route>> {
         return fetch(`${this.baseUrl}/route`)
         .then(t => t.json())
+    }
+
+    createRoute(request: CreateRouteRequest): Promise<string> {
+        return fetch(`${this.baseUrl}/route`, {
+            method: "POST",
+            body: JSON.stringify(request),
+            headers: {
+                "Authorization": `Bearer ${this.jwt}`
+            }
+        }).then(t => t.json());
     }
 
 }

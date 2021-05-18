@@ -1,0 +1,18 @@
+.maker{
+    display: flex;
+    justify-content: center;
+}
+
+.makerText{
+    max-width: 800px;
+}
+
+.makerEditor{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 25px;
+}
+
+.error{
+    color: red;
+}

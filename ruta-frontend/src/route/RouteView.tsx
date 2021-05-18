@@ -60,7 +60,7 @@ export function RouteView({id, apiService}: Props){
     {route && (
         <div className="routeView">
             <MapContainer bounds={routeBounds()} scrollWheelZoom={true} style={{width: "500px", height: "500px"}}>
-                <WMSTileLayer url=" http://orto.wms.itacyl.es/WMS?" format="image/jpeg" crs={CRS.EPSG4326} tileSize={256} layers="Ortofoto_2020" attribution="© ITaCyL. Junta de Castilla y León"/>
+                <WMSTileLayer url=" http://orto.wms.itacyl.es/WMS?" format="image/jpeg" crs={CRS.EPSG4326} tileSize={256} layers="Ortofoto_2017" attribution="© ITaCyL. Junta de Castilla y León"/>
                 <GeoJSON data={route.geojson} style={{color: "#8A430A", stroke: true, weight: 3}}/>
                 {openPanel && (
                     <Marker position={[monuments[openPanel].lat, monuments[openPanel].lon]}/>
