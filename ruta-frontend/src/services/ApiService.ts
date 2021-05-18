@@ -42,7 +42,8 @@ export class ApiService{
             method: "POST",
             body: JSON.stringify(request),
             headers: {
-                "Authorization": `Bearer ${this.jwt}`
+                "Authorization": `Bearer ${this.jwt}`,
+                "Content-Type": "application/json"
             }
         }).then(t => t.json());
     }
