@@ -30,7 +30,6 @@ export default function RouteMaker({apiService, user}: Props) {
 
     const ClickHandler = () => {
         useMapEvent("click", (evt) => {
-            console.log(evt.latlng);
             const newRoute = [...route];
             newRoute.push(evt.latlng);
             setRoute(newRoute);

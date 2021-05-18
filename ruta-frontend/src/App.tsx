@@ -11,7 +11,7 @@ import { RouteListView } from './route/RouteListView';
 import RouteMaker from './maker/RouteMaker';
 
 function App() {
-  const apiService = new ApiService();
+  const [apiService, setApiService] = useState(new ApiService());
   const [user, setUser] = useState<User|null>(null);
 
   const handleLogin = async (googleData: any) => {
