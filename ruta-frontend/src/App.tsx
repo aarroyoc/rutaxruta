@@ -11,6 +11,7 @@ import { RouteListView } from './route/RouteListView';
 import RouteMaker from './maker/RouteMaker';
 
 function App() {
+  // eslint-disable-next-line
   const [apiService, setApiService] = useState(new ApiService());
   const [user, setUser] = useState<User|null>(null);
 
