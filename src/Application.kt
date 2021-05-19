@@ -51,6 +51,7 @@ fun Application.module(testing: Boolean = false) {
     }
 
     install(CORS) {
+        method(HttpMethod.Get)
         method(HttpMethod.Options)
         method(HttpMethod.Post)
         method(HttpMethod.Put)
@@ -58,6 +59,7 @@ fun Application.module(testing: Boolean = false) {
         method(HttpMethod.Patch)
         header(HttpHeaders.Authorization)
         allowCredentials = true
+        allowNonSimpleContentTypes = true
         anyHost() // @TODO: Don't do this in production if possible. Try to limit it.
     }
 
