@@ -6,6 +6,7 @@ import { ApiService } from "../services/ApiService";
 import "./RouteMaker.css";
 import { useState } from "react";
 import { ChoiceGroup, PrimaryButton, TextField } from "@fluentui/react";
+import { useHistory } from "react-router";
 
 type Props = {
     apiService: ApiService,
@@ -15,6 +16,7 @@ type Props = {
 type WmsType = "ign" | "itacyl";
 
 export default function RouteMaker({apiService, user}: Props) {
+    const history = useHistory();
     const [wms, setWms] = useState<WmsType>("ign");
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
@@ -62,7 +64,7 @@ export default function RouteMaker({apiService, user}: Props) {
                 }
             }
         }).then(() => {
-            window.location.href = "/";
+            history.push("/");
         }).catch(() => {
             setError(true);
         });

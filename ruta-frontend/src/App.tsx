@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from '@fluentui/react';
 import GoogleLogin from 'react-google-login';
-import { BrowserRouter as Switch, Route } from "react-router-dom";
+import { Switch, Route, useHistory, useLocation } from "react-router-dom";
 
 import { ApiService } from './services/ApiService';
 import User from './models/User';
@@ -15,6 +15,9 @@ function App() {
   const [apiService, setApiService] = useState(new ApiService());
   const [user, setUser] = useState<User|null>(null);
 
+  const history = useHistory();
+  const location = useLocation();
+
   const handleLogin = async (googleData: any) => {
     const jwt = await apiService.getToken(googleData.tokenId);
     apiService.setJwt(jwt);
@@ -27,9 +30,9 @@ function App() {
       <header className="App-header">
         <h1>Ruta x ruta x Castilla y León</h1>
         <nav className="App-header-links">
-          <Link href="/">Catálogo de rutas</Link>
+          <Link onClick={() => history.push("/") }>Catálogo de rutas</Link>
           <Link href="">Viajes de los usuarios</Link>
-          <Link href="/maker/">Crea tu ruta</Link>
+          <Link onClick={() => history.push("/maker/")}>Crea tu ruta</Link>
         </nav>
         <nav>
           {user === null && 
@@ -50,14 +53,14 @@ function App() {
       <div className="App-main" style={{ backgroundImage: `url(${process.env.PUBLIC_URL + '/background.jpg'})` }}>
         <main className="App-main-main">
           <Switch>
+            <Route exact path="/">
+              <RouteListView apiService={apiService}/>
+            </Route>
             <Route path="/maker/">
               <RouteMaker apiService={apiService} user={user}/>
             </Route>
             <Route path="/route/:id">
-              <RouteListView apiService={apiService}/>
-            </Route>
-            <Route exact path="/">
-              <RouteListView apiService={apiService}/>
+              <RouteListView apiService={apiService} key={location.pathname}/>
             </Route>
           </Switch>
         </main>
