@@ -54,6 +54,7 @@ export function RouteView({id, apiService}: Props){
 
     const monuments = pois.filter(t => t.type === "monument");
     const restaurants = pois.filter(t => t.type === "restaurant");
+    const events = pois.filter(t => t.type === "event");
 
     return (<>
     {!route && (
@@ -79,7 +80,9 @@ export function RouteView({id, apiService}: Props){
                 </div>
                 <h3>Eventos próximos cercanos</h3>
                 <h3>Tracks de los usuarios</h3>
-                <div></div>
+                <div style={{overflowY: "scroll"}}>
+                    <List items={events} onRenderCell={onRenderPoi}/>
+                </div>
                 <div></div>
                 <h3>Comentarios</h3>
                 <div></div>
