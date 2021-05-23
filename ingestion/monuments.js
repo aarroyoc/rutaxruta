@@ -14,6 +14,7 @@ async function main(){
         return {
             name: monument.nombre,
             description: monument.Descripcion,
+            type: "monument",
             location: {
                 type: "Point",
                 coordinates: [parseFloat(monument.coordenadas.longitud), parseFloat(monument.coordenadas.latitud)]

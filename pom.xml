@@ -13,6 +13,9 @@
         <kotlin_version>1.5.0</kotlin_version>
         <serialization.version>1.2.1</serialization.version>
         <jts.version>1.16.1</jts.version>
+        <kmongo_version>4.2.7</kmongo_version>
+        <google_version>1.31.2</google_version>
+        <mockk_version>1.10.6</mockk_version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
         <main.class>io.ktor.server.netty.EngineMain</main.class>
@@ -105,17 +108,17 @@
         <dependency>
             <groupId>org.litote.kmongo</groupId>
             <artifactId>kmongo</artifactId>
-            <version>4.2.6</version>
+            <version>${kmongo_version}</version>
         </dependency>
         <dependency>
             <groupId>org.litote.kmongo</groupId>
             <artifactId>kmongo-coroutine</artifactId>
-            <version>4.2.6</version>
+            <version>${kmongo_version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.api-client</groupId>
             <artifactId>google-api-client</artifactId>
-            <version>1.31.2</version>
+            <version>${google_version}</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlinx</groupId>
@@ -130,7 +133,7 @@
         <dependency>
             <groupId>io.mockk</groupId>
             <artifactId>mockk</artifactId>
-            <version>1.10.6</version>
+            <version>${mockk_version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

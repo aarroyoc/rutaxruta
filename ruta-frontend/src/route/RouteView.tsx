@@ -35,23 +35,25 @@ export function RouteView({id, apiService}: Props){
         }
     }
 
-    const onRenderMonument = (monument?: Poi, index?: number) => {
+    const onRenderPoi = (poi?: Poi, index?: number) => {
+        const poiIndex = pois.findIndex(t => t.name === poi?.name);
         return (
             <div>
-                <Link onClick={() => setOpenPanel(index)}>{monument?.name}</Link>
+                <Link onClick={() => setOpenPanel(poiIndex)}>{poi?.name}</Link>
                 <Panel 
-                    headerText={monument?.name}
+                    headerText={poi?.name}
                     isBlocking={false}
-                    isOpen={openPanel === index}
+                    isOpen={openPanel === poiIndex}
                     onDismiss={() => setOpenPanel(undefined)}
                     closeButtonAriaLabel="Close">
-                    <div dangerouslySetInnerHTML={{__html: monument?.description || ""}} />
+                    <div dangerouslySetInnerHTML={{__html: poi?.description || ""}} />
                 </Panel>
             </div>
         );
     }
 
     const monuments = pois.filter(t => t.type === "monument");
+    const restaurants = pois.filter(t => t.type === "restaurant");
 
     return (<>
     {!route && (
@@ -63,16 +65,18 @@ export function RouteView({id, apiService}: Props){
                 <WMSTileLayer url=" http://orto.wms.itacyl.es/WMS?" format="image/jpeg" crs={CRS.EPSG4326} tileSize={256} layers="Ortofoto_2017" attribution="© ITaCyL. Junta de Castilla y León"/>
                 <GeoJSON data={route.geojson} style={{color: "#8A430A", stroke: true, weight: 3}}/>
                 {openPanel && (
-                    <Marker position={[monuments[openPanel].lat, monuments[openPanel].lon]}/>
+                    <Marker position={[pois[openPanel].lat, pois[openPanel].lon]}/>
                 )}
             </MapContainer>
             <div className="routeViewData">
                 <h3>Monumentos cercanos</h3>
                 <h3>Bares y restaurantes cercanos</h3>
                 <div style={{overflowY: "scroll"}}>
-                    <List items={monuments} onRenderCell={onRenderMonument}/>
+                    <List items={monuments} onRenderCell={onRenderPoi}/>
                 </div>
-                <div></div>
+                <div style={{overflowY: "scroll"}}>
+                    <List items={restaurants} onRenderCell={onRenderPoi}/>
+                </div>
                 <h3>Eventos próximos cercanos</h3>
                 <h3>Tracks de los usuarios</h3>
                 <div></div>

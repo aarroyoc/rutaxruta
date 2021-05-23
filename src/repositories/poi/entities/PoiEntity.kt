@@ -8,5 +8,6 @@ data class PoiEntity(
     val _id: String? = null,
     val name: String,
     val description: String,
+    val type: String,
     val location: GeoJsonPoint
 )

@@ -23,7 +23,7 @@ class PoiRepository {
 
     private fun PoiEntity.toModel() =
         Poi(
-            type = Poi.InterestPointType.MONUMENT,
+            type = this.type,
             name = this.name,
             description = this.description,
             lat = this.location.coordinates[1],

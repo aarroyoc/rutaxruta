@@ -14,7 +14,7 @@ data class PoiDto(
     companion object {
         fun fromModel(poi: Poi) =
             PoiDto(
-                type = poi.type.value,
+                type = poi.type,
                 name = poi.name,
                 description = poi.description,
                 lat = poi.lat,
