@@ -8,7 +8,7 @@ import eu.adrianistan.model.Route as RouteModel
 import eu.adrianistan.model.RoutePoint
 import eu.adrianistan.model.User
 import eu.adrianistan.repositories.poi.PoiRepository
-import eu.adrianistan.route.RouteRepository
+import eu.adrianistan.repositories.route.RouteRepository
 import eu.adrianistan.usecase.GetPoisNearRoute
 import io.ktor.application.*
 import io.ktor.auth.*
@@ -56,25 +56,23 @@ fun Route.routeRouting() {
             post {
                 try {
                     val request = call.receive<RouteCreateRequest>()
-                    routeRepository.saveRoute(
-                        RouteModel(
-                            id = null,
-                            name = request.name,
-                            description = request.description,
-                            comments = emptyList(),
-                            media = emptyList(),
-                            points = convertGeoJsonToPoints(request.geojson),
-                            author = User(
+                    val user = call.authentication.principal<User>()
+                    if (user != null) {
+                        routeRepository.saveRoute(
+                            RouteModel(
                                 id = null,
-                                name = "TODO",
-                                picture = "TODO",
-                                type = "google",
-                                providerId = "TODO",
+                                name = request.name,
+                                description = request.description,
+                                comments = emptyList(),
+                                media = emptyList(),
+                                points = convertGeoJsonToPoints(request.geojson),
+                                userId = user.id ?: error("Invalid user"),
+                                status = eu.adrianistan.model.Route.RouteState.IN_REVIEW
                             )
-                        )
-                    )?.let {
-                        call.respondText(it, status = HttpStatusCode.Created)
-                    } ?: call.respondText("Server Error", status = HttpStatusCode.InternalServerError)
+                        )?.let {
+                            call.respondText(it, status = HttpStatusCode.Created)
+                        } ?: call.respondText("Server Error", status = HttpStatusCode.InternalServerError)
+                    }
                 } catch (e: Exception) {
                     call.respondText("Bad Request", status = HttpStatusCode.BadRequest)
                 }

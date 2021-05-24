@@ -14,13 +14,7 @@ object RouteMother {
             name = "Valladolid - Cigales por Canal de Castilla",
             description = "Vamos de Valladolid a Cigales siguiendo el Canal de Castilla<br>Pasamos al lado del ITaCyl",
             comments = emptyList(),
-            author = User(
-                id = null,
-                type = "google",
-                providerId = "111111111122222234444070",
-                name = "Cubero",
-                picture = ""
-            ),
+            userId = "some-user-id",
             media = emptyList(),
             points = listOf(
                 RoutePoint(41.66008825124748, -4.733734130859375),
@@ -32,7 +26,8 @@ object RouteMother {
                 RoutePoint(41.67265537326585, -4.7371673583984375),
                 RoutePoint(41.66957793753977, -4.736137390136719),
                 RoutePoint(41.66162721430806, -4.742145538330078)
-            )
+            ),
+            status = Route.RouteState.PUBLISHED
         )
 
     fun buildEntity(): RouteEntity {
@@ -45,7 +40,9 @@ object RouteMother {
                 coordinates = route.points.map { point ->
                     arrayOf(point.lon, point.lat)
                 }
-            )
+            ),
+            userId = route.userId,
+            status = route.status.value
         )
     }
 }

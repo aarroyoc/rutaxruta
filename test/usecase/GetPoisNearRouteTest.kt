@@ -1,7 +1,7 @@
 package usecase
 
 import eu.adrianistan.repositories.poi.PoiRepository
-import eu.adrianistan.route.RouteRepository
+import eu.adrianistan.repositories.route.RouteRepository
 import eu.adrianistan.usecase.GetPoisNearRoute
 import io.mockk.coEvery
 import io.mockk.mockk

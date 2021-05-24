@@ -2,7 +2,7 @@ package eu.adrianistan.usecase
 
 import eu.adrianistan.model.Poi
 import eu.adrianistan.repositories.poi.PoiRepository
-import eu.adrianistan.route.RouteRepository
+import eu.adrianistan.repositories.route.RouteRepository
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory
 import org.locationtech.jts.operation.buffer.BufferOp

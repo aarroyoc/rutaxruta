@@ -1,17 +1,17 @@
-package eu.adrianistan.route
+package eu.adrianistan.repositories.route
 
 import eu.adrianistan.Factory
 import eu.adrianistan.model.Route
 import eu.adrianistan.model.RoutePoint
-import eu.adrianistan.model.User
 import eu.adrianistan.route.entities.GeoJsonLineString
 import eu.adrianistan.repositories.route.entities.RouteEntity
+import org.litote.kmongo.eq
 
-class RouteRepository (){
+class RouteRepository {
     private val collection = Factory.getDatabase().getCollection<RouteEntity>("route")
 
     suspend fun listRoutes(): List<Route> =
-        collection.find().toList().map {
+        collection.find(RouteEntity::status eq "published").toList().map {
             it.toModel()
         }
 
@@ -22,20 +22,15 @@ class RouteRepository (){
     private fun RouteEntity.toModel() =
         Route(
             id = this._id,
-            author = User(
-                id = null,
-                type = "google",
-                providerId = "TODO",
-                name = "TODO",
-                picture = "TODO"
-            ),
+            userId = this.userId,
             points = this.points.coordinates.map { coordinates ->
                 RoutePoint(coordinates[1], coordinates[0])
             },
             media = emptyList(),
             name = this.name,
             description = this.description,
-            comments = emptyList()
+            comments = emptyList(),
+            status = Route.RouteState.valueOf(this.status.uppercase())
         )
 
     suspend fun saveRoute(route: Route): String? {
@@ -47,7 +42,9 @@ class RouteRepository (){
                 coordinates = route.points.map { point ->
                     arrayOf(point.lon, point.lat)
                 }
-            )
+            ),
+            userId = route.userId,
+            status = route.status.value
         )
         collection.insertOne(routeEntity)
         return routeEntity._id

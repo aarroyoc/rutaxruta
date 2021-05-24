@@ -7,5 +7,11 @@ data class Route(
     val comments: List<Comment>,
     val media: List<Media>,
     val points: List<RoutePoint>,
-    val author: User,
-)
+    val userId: String,
+    val status: RouteState
+) {
+    enum class RouteState(val value: String){
+        IN_REVIEW("in-review"),
+        PUBLISHED("published");
+    }
+}

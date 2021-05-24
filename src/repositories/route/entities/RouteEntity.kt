@@ -10,4 +10,6 @@ data class RouteEntity (
     val description: String,
     val comments: List<String>,
     val points: GeoJsonLineString,
+    val userId: String,
+    val status: String,
 )
