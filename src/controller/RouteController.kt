@@ -25,7 +25,7 @@ fun Route.routeRouting() {
 
     route("/route") {
         get {
-            val routes = routeRepository.listRoutes().map { it.toDto() }
+            val routes = routeRepository.listPublishedRoutes().map { it.toDto() }
             call.respond(routes)
         }
 

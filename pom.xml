@@ -8,11 +8,13 @@
     <description>rutaxruta</description>
     <properties>
         <logback_version>1.2.1</logback_version>
-        <ktor_version>1.5.4</ktor_version>
+        <ktor_version>1.6.0</ktor_version>
         <kotlin.code.style>official</kotlin.code.style>
-        <kotlin_version>1.5.0</kotlin_version>
+        <kotlin_version>1.5.10</kotlin_version>
         <serialization.version>1.2.1</serialization.version>
+        <datetime.version>0.2.1</datetime.version>
         <jts.version>1.16.1</jts.version>
+        <jpx_version>2.2.0</jpx_version>
         <kmongo_version>4.2.6</kmongo_version>
         <google_version>1.31.2</google_version>
         <mockk_version>1.10.6</mockk_version>
@@ -112,7 +114,7 @@
         </dependency>
         <dependency>
             <groupId>org.litote.kmongo</groupId>
-            <artifactId>kmongo-coroutine</artifactId>
+            <artifactId>kmongo-coroutine-serialization</artifactId>
             <version>${kmongo_version}</version>
         </dependency>
         <dependency>
@@ -126,9 +128,19 @@
             <version>${serialization.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.jetbrains.kotlinx</groupId>
+            <artifactId>kotlinx-datetime-jvm</artifactId>
+            <version>${datetime.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.locationtech.jts</groupId>
             <artifactId>jts-core</artifactId>
             <version>${jts.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jenetics</groupId>
+            <artifactId>jpx</artifactId>
+            <version>${jpx_version}</version>
         </dependency>
         <dependency>
             <groupId>io.mockk</groupId>

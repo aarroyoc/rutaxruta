@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx creator="StravaGPX Android" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd" version="1.1" xmlns="http://www.topografix.com/GPX/1/1">
+    <metadata>
+        <time>2021-05-15T07:53:43Z</time>
+    </metadata>
+    <trk>
+        <name>Castrodeza Ida</name>
+        <type>1</type>
+        <trkseg>
+            <trkpt lat="41.6666000" lon="-4.7211110">
+                <ele>692.6</ele>
+            </trkpt>
+            <trkpt lat="41.6666555" lon="-4.7211155">
+                <ele>692.6</ele>
+            </trkpt>
+            <trkpt lat="41.6666000" lon="-4.7211160">
+                <ele>692.6</ele>
+            </trkpt>
+        </trkseg>
+    </trk>
+</gpx>

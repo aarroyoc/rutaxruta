@@ -10,7 +10,7 @@ import org.litote.kmongo.eq
 class RouteRepository {
     private val collection = Factory.getDatabase().getCollection<RouteEntity>("route")
 
-    suspend fun listRoutes(): List<Route> =
+    suspend fun listPublishedRoutes(): List<Route> =
         collection.find(RouteEntity::status eq "published").toList().map {
             it.toModel()
         }

@@ -15,7 +15,7 @@ import mother.RouteMother
 import mother.UserMother
 
 class RouteControllerTest {
-    @AfterTest
+    @BeforeTest
     fun cleanDatabase() {
         runBlocking {
             Factory.getDatabase().dropCollection("route")

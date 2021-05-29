@@ -1,4 +1,4 @@
-package usecase
+package features
 
 import eu.adrianistan.repositories.poi.PoiRepository
 import eu.adrianistan.repositories.route.RouteRepository

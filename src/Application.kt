@@ -9,6 +9,7 @@ import io.ktor.http.*
 import io.ktor.auth.*
 import eu.adrianistan.controller.authRouting
 import eu.adrianistan.controller.routeRouting
+import eu.adrianistan.controller.trackRouting
 import eu.adrianistan.controller.userRouting
 import eu.adrianistan.repositories.user.UserRepository
 import io.ktor.auth.jwt.*
@@ -64,8 +65,9 @@ fun Application.module(testing: Boolean = false) {
     }
 
     routing {
-        routeRouting()
         authRouting(httpClient)
+        routeRouting()
+        trackRouting()
         userRouting()
     }
 }
