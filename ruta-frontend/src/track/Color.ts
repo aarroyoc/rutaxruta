@@ -35,6 +35,9 @@ export class Color {
 
     getColor(value: number): string {
         const index = Math.floor(value*this.colors.length);
+        if(index >= this.colors.length){
+            return this.colors[this.colors.length-1];
+        }
         return this.colors[index];
     }
 

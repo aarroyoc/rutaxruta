@@ -17,6 +17,7 @@
         <jpx_version>2.2.0</jpx_version>
         <kmongo_version>4.2.6</kmongo_version>
         <google_version>1.31.2</google_version>
+        <kotlin_statistics>1.2.1</kotlin_statistics>
         <mockk_version>1.10.6</mockk_version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
@@ -141,6 +142,11 @@
             <groupId>io.jenetics</groupId>
             <artifactId>jpx</artifactId>
             <version>${jpx_version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.nield</groupId>
+            <artifactId>kotlin-statistics</artifactId>
+            <version>${kotlin_statistics}</version>
         </dependency>
         <dependency>
             <groupId>io.mockk</groupId>

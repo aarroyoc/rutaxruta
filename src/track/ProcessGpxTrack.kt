@@ -5,6 +5,7 @@ import eu.adrianistan.model.TrackLine
 import io.jenetics.jpx.GPX
 import io.jenetics.jpx.Length
 import io.jenetics.jpx.geom.Geoid
+import org.nield.kotlinstatistics.percentile
 import java.io.InputStream
 import java.time.Duration
 
@@ -41,7 +42,7 @@ class ProcessGpxTrack {
 
         return Track(
             segments = lines,
-            maxSpeed = lines.map { it.speed }.maxOrNull() ?: 0.0,
+            maxSpeed = lines.map { it.speed }.percentile(99.0) ?: 0.0,
             minSpeed = lines.map { it.speed }.minOrNull() ?: 0.0
         )
     }

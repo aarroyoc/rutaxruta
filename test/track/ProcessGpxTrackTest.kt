@@ -16,7 +16,7 @@ class ProcessGpxTrackTest {
         val gpxInfo = processGpxTrack(gpx)
         assertEquals(5107, gpxInfo.segments.size)
         assertEquals(0.0, gpxInfo.minSpeed)
-        assert(gpxInfo.maxSpeed > 18.0)
+        assert(gpxInfo.maxSpeed > 8.0)
     }
 
     @Test
