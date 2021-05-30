@@ -8,5 +8,5 @@ data class RawTrackEntity(
     val _id: String? = null,
     val name: String,
     val gpx: String,
-    val timestamp: Instant
+    val timestamp: Long
 )

@@ -9,6 +9,7 @@ import User from './models/User';
 import './App.css';
 import { RouteListView } from './route/RouteListView';
 import RouteMaker from './maker/RouteMaker';
+import TrackView from './track/TrackView';
 
 function App() {
   // eslint-disable-next-line
@@ -61,6 +62,9 @@ function App() {
             </Route>
             <Route path="/route/:id">
               <RouteListView apiService={apiService} key={location.pathname}/>
+            </Route>
+            <Route path="/track/:id">
+              <TrackView apiService={apiService} key={location.pathname}/>
             </Route>
           </Switch>
         </main>

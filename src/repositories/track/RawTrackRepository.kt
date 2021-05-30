@@ -3,6 +3,7 @@ package eu.adrianistan.repositories.track
 import eu.adrianistan.Factory
 import eu.adrianistan.model.RawTrack
 import eu.adrianistan.repositories.track.entities.RawTrackEntity
+import kotlinx.datetime.Instant
 
 class RawTrackRepository {
     private val collection = Factory.getDatabase().getCollection<RawTrackEntity>("track")
@@ -18,7 +19,7 @@ class RawTrackRepository {
             id = this._id,
             name = this.name,
             gpx = this.gpx,
-            timestamp = this.timestamp
+            timestamp = Instant.fromEpochSeconds(this.timestamp)
         )
 
     private fun RawTrack.toEntity(): RawTrackEntity =
@@ -26,6 +27,6 @@ class RawTrackRepository {
             _id = this.id,
             name = this.name,
             gpx = this.gpx,
-            timestamp = this.timestamp
+            timestamp = this.timestamp.epochSeconds
         )
 }

@@ -1,6 +1,7 @@
 import CreateRouteRequest from "../models/CreateRouteRequest";
 import Poi from "../models/Poi";
 import Route from "../models/Route";
+import Track from "../models/Track";
 import User from "../models/User";
 
 export class ApiService{
@@ -46,6 +47,11 @@ export class ApiService{
                 "Content-Type": "application/json"
             }
         }).then(t => t.json());
+    }
+
+    getTrack(id: string): Promise<Track> {
+        return fetch(`${this.baseUrl}/track/${id}`)
+        .then(t => t.json());
     }
 
 }

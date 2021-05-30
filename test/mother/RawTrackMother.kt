@@ -13,6 +13,6 @@ object RawTrackMother {
             _id = SOME_TRACK_ID,
             name = "Castrodeza Ida",
             gpx = File("test/track/castrodeza.gpx").readText(),
-            timestamp = Instant.fromEpochMilliseconds(100000)
+            timestamp = 100000
         )
 }
