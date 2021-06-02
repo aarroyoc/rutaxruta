@@ -13,6 +13,7 @@ object RawTrackMother {
             _id = SOME_TRACK_ID,
             name = "Castrodeza Ida",
             gpx = File("test/track/castrodeza.gpx").readText(),
-            timestamp = 100000
+            timestamp = 100000,
+            userId = UserMother.buildEntity()._id ?: error("")
         )
 }

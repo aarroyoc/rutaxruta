@@ -83,6 +83,43 @@ class TrackControllerTest {
         }
     }
 
+    @Test
+    fun `delete an existing track`() {
+        val token = runBlocking {
+            generateToken()
+        }
+        runBlocking {
+            saveRawTrack()
+        }
+
+        withTestApplication({module(testing = true)}) {
+            handleRequest(HttpMethod.Delete, "/track/$SOME_TRACK_ID") {
+                addHeader(HttpHeaders.Authorization, "Bearer $token")
+            }.apply {
+                assertEquals(HttpStatusCode.NoContent, this.response.status())
+            }
+            handleRequest(HttpMethod.Get, "/track/$SOME_TRACK_ID").apply {
+                assertEquals(HttpStatusCode.NotFound, this.response.status())
+            }
+        }
+    }
+
+    @Test
+    fun `delete a track from other user`() {
+        val token = runBlocking {
+            generateToken()
+            saveRawTrack()
+            generateTokenOtherUser()
+        }
+        withTestApplication({module(testing = true)}) {
+            handleRequest(HttpMethod.Delete, "/track/$SOME_TRACK_ID") {
+                addHeader(HttpHeaders.Authorization, "Bearer $token")
+            }.apply {
+                assertEquals(HttpStatusCode.NotFound, this.response.status())
+            }
+        }
+    }
+
     private suspend fun saveRawTrack() {
         val collection = Factory.getDatabase().getCollection<RawTrackEntity>("track")
         collection.insertOne(RawTrackMother.buildEntity())
@@ -92,5 +129,11 @@ class TrackControllerTest {
         val collection = Factory.getDatabase().getCollection<UserEntity>("user")
         collection.insertOne(UserMother.buildEntity())
         return JwtConfig.makeToken(UserMother.build())
+    }
+
+    private suspend fun generateTokenOtherUser(): String {
+        val collection = Factory.getDatabase().getCollection<UserEntity>("user")
+        collection.insertOne(UserMother.buildEntity().copy(_id = "34567"))
+        return JwtConfig.makeToken(UserMother.build().copy(id = "34567"))
     }
 }
