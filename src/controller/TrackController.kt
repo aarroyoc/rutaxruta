@@ -5,6 +5,7 @@ import eu.adrianistan.controller.dto.toDto
 import eu.adrianistan.features.CreateRawTrack
 import eu.adrianistan.features.DeleteRawTrack
 import eu.adrianistan.model.User
+import eu.adrianistan.repositories.route.RouteRepository
 import eu.adrianistan.repositories.track.RawTrackRepository
 import eu.adrianistan.usecase.GetTrack
 import io.ktor.application.*
@@ -19,9 +20,10 @@ import io.ktor.util.*
 
 fun Route.trackRouting() {
     val rawTrackRepository = RawTrackRepository()
+    val routeRepository = RouteRepository()
 
     val getTrack = GetTrack(rawTrackRepository)
-    val createRawTrack = CreateRawTrack(rawTrackRepository)
+    val createRawTrack = CreateRawTrack(rawTrackRepository, routeRepository)
     val deleteRawTrack = DeleteRawTrack(rawTrackRepository)
 
     route("/track") {
@@ -39,7 +41,7 @@ fun Route.trackRouting() {
                 val user = call.authentication.principal<User>()
                 if (user != null) {
                     try {
-                        createRawTrack(request.name, request.gpx, user)
+                        createRawTrack(request.name, request.gpx, request.routeId, user)
                         call.respond(HttpStatusCode.Created)
                     } catch (e: Exception) {
                         throw BadRequestException("invalid gpx file")

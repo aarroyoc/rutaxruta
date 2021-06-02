@@ -8,7 +8,8 @@ data class Route(
     val media: List<Media>,
     val points: List<RoutePoint>,
     val userId: String,
-    val status: RouteState
+    val status: RouteState,
+    val tracks: List<TrackInfo>,
 ) {
     enum class RouteState(val value: String){
         IN_REVIEW("in-review"),

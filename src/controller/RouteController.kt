@@ -67,7 +67,8 @@ fun Route.routeRouting() {
                                 media = emptyList(),
                                 points = convertGeoJsonToPoints(request.geojson),
                                 userId = user.id ?: error("Invalid user"),
-                                status = eu.adrianistan.model.Route.RouteState.IN_REVIEW
+                                status = eu.adrianistan.model.Route.RouteState.IN_REVIEW,
+                                tracks = emptyList()
                             )
                         )?.let {
                             call.respondText(it, status = HttpStatusCode.Created)

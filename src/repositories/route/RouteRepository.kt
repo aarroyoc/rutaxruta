@@ -3,9 +3,12 @@ package eu.adrianistan.repositories.route
 import eu.adrianistan.Factory
 import eu.adrianistan.model.Route
 import eu.adrianistan.model.RoutePoint
+import eu.adrianistan.model.TrackInfo
 import eu.adrianistan.route.entities.GeoJsonLineString
 import eu.adrianistan.repositories.route.entities.RouteEntity
+import eu.adrianistan.repositories.route.entities.toEntity
 import org.litote.kmongo.eq
+import org.litote.kmongo.push
 
 class RouteRepository {
     private val collection = Factory.getDatabase().getCollection<RouteEntity>("route")
@@ -30,11 +33,12 @@ class RouteRepository {
             name = this.name,
             description = this.description,
             comments = emptyList(),
-            status = Route.RouteState.valueOf(this.status.uppercase())
+            status = Route.RouteState.valueOf(this.status.uppercase()),
+            tracks = this.tracks.map { it.toModel() }
         )
 
     suspend fun saveRoute(route: Route): String? {
-        var routeEntity = RouteEntity(
+        val routeEntity = RouteEntity(
             name = route.name,
             description = route.description,
             comments = emptyList(),
@@ -44,10 +48,15 @@ class RouteRepository {
                 }
             ),
             userId = route.userId,
-            status = route.status.value
+            status = route.status.value,
+            tracks = emptyList()
         )
         collection.insertOne(routeEntity)
         return routeEntity._id
+    }
+
+    suspend fun addTrack(routeId: String, trackInfo: TrackInfo) {
+        collection.updateOne(RouteEntity::_id eq routeId, push(RouteEntity::tracks, trackInfo.toEntity()))
     }
 
     suspend fun deleteRoute(routeId: String): Boolean =

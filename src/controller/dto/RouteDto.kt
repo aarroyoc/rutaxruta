@@ -10,6 +10,7 @@ data class RouteDto(
     val description: String,
     val comments: List<String>,
     val geojson: GeoJsonDto,
+    val tracks: List<TrackInfoDto>
 )
 
 private fun RouteDto.toModel(): Route =
@@ -28,5 +29,6 @@ fun Route.toDto(): RouteDto =
                 }
             ),
             properties = emptyMap<String, String>()
-        )
+        ),
+        tracks = this.tracks.map { it.toDto() }
     )

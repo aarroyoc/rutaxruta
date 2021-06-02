@@ -12,4 +12,5 @@ data class RouteEntity (
     val points: GeoJsonLineString,
     val userId: String,
     val status: String,
+    val tracks: List<TrackInfoEntity>
 )

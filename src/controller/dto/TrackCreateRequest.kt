@@ -6,4 +6,5 @@ import kotlinx.serialization.Serializable
 data class TrackCreateRequest(
     val name: String,
     val gpx: String,
+    val routeId: String? = null
 )

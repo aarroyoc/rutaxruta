@@ -27,7 +27,8 @@ object RouteMother {
                 RoutePoint(41.66957793753977, -4.736137390136719),
                 RoutePoint(41.66162721430806, -4.742145538330078)
             ),
-            status = Route.RouteState.PUBLISHED
+            status = Route.RouteState.PUBLISHED,
+            tracks = emptyList()
         )
 
     fun buildEntity(): RouteEntity {
@@ -42,7 +43,8 @@ object RouteMother {
                 }
             ),
             userId = route.userId,
-            status = route.status.value
+            status = route.status.value,
+            tracks = emptyList()
         )
     }
 }
