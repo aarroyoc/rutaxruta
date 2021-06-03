@@ -95,6 +95,46 @@ class TrackControllerTest {
     }
 
     @Test
+    fun `submit a valid track, associate with a route and delete it`() {
+        val token = runBlocking {
+            saveRoute()
+            generateToken()
+        }
+
+        val gpxText = File("test/track/castrodeza.gpx").readText().replace("\"", "\\\"")
+
+        withTestApplication({ module(testing = true)}) {
+            handleRequest(HttpMethod.Post, "/track") {
+                addHeader(HttpHeaders.ContentType, ContentType.Application.Json.toString())
+                addHeader(HttpHeaders.Authorization, "Bearer $token")
+                setBody("""{"name": "Castrodeza Ida", "gpx": "$gpxText", "routeId": "$SOME_ROUTE_ID"}""")
+            }.apply {
+                assertEquals(HttpStatusCode.Created, this.response.status())
+            }
+
+            handleRequest(HttpMethod.Get, "/route/$SOME_ROUTE_ID").apply {
+                assertEquals(HttpStatusCode.OK, this.response.status())
+                assert(this.response.content?.contains("Castrodeza Ida") ?: false)
+            }
+
+            val trackId = runBlocking {
+                getTrackId()
+            }
+
+            handleRequest(HttpMethod.Delete, "/track/$trackId") {
+                addHeader(HttpHeaders.Authorization, "Bearer $token")
+            }.apply {
+                assertEquals(HttpStatusCode.NoContent, this.response.status())
+            }
+
+            handleRequest(HttpMethod.Get, "/route/$SOME_ROUTE_ID").apply {
+                assertEquals(HttpStatusCode.OK, this.response.status())
+                assertFalse(this.response.content?.contains("Castrodeza Ida") ?: true)
+            }
+        }
+    }
+
+    @Test
     fun `submit an invalid track`() {
         val token = runBlocking {
             generateToken()
@@ -147,6 +187,11 @@ class TrackControllerTest {
                 assertEquals(HttpStatusCode.NotFound, this.response.status())
             }
         }
+    }
+
+    private suspend fun getTrackId(): String? {
+        val collection = Factory.getDatabase().getCollection<RawTrackEntity>("track")
+        return collection.findOne()?._id
     }
 
     private suspend fun saveRawTrack() {

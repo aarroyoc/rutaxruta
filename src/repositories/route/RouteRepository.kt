@@ -6,9 +6,9 @@ import eu.adrianistan.model.RoutePoint
 import eu.adrianistan.model.TrackInfo
 import eu.adrianistan.route.entities.GeoJsonLineString
 import eu.adrianistan.repositories.route.entities.RouteEntity
+import eu.adrianistan.repositories.route.entities.TrackInfoEntity
 import eu.adrianistan.repositories.route.entities.toEntity
-import org.litote.kmongo.eq
-import org.litote.kmongo.push
+import org.litote.kmongo.*
 
 class RouteRepository {
     private val collection = Factory.getDatabase().getCollection<RouteEntity>("route")
@@ -57,6 +57,10 @@ class RouteRepository {
 
     suspend fun addTrack(routeId: String, trackInfo: TrackInfo) {
         collection.updateOne(RouteEntity::_id eq routeId, push(RouteEntity::tracks, trackInfo.toEntity()))
+    }
+
+    suspend fun removeTrack(trackId: String) {
+        collection.updateMany(RouteEntity::tracks / TrackInfoEntity::trackId eq trackId, pullByFilter(RouteEntity::tracks, TrackInfoEntity::trackId eq trackId))
     }
 
     suspend fun deleteRoute(routeId: String): Boolean =

@@ -24,7 +24,7 @@ fun Route.trackRouting() {
 
     val getTrack = GetTrack(rawTrackRepository)
     val createRawTrack = CreateRawTrack(rawTrackRepository, routeRepository)
-    val deleteRawTrack = DeleteRawTrack(rawTrackRepository)
+    val deleteRawTrack = DeleteRawTrack(rawTrackRepository, routeRepository)
 
     route("/track") {
         get("{id}") {
