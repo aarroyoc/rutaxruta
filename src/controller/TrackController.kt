@@ -43,7 +43,7 @@ fun Route.trackRouting() {
                 val preview = previewTrack(request.gpx)
                 call.respond(preview.toDto())
             }
-            
+
             post {
                 val request = call.receive<TrackCreateRequest>()
                 val user = call.authentication.principal<User>()
