@@ -6,6 +6,7 @@ import { ApiService } from "../services/ApiService";
 import { CRS } from "leaflet";
 import "./RouteView.css";
 import Poi from "../models/Poi";
+import TrackInfo from "../models/TrackInfo";
 
 type Props = {
     id: string,
@@ -52,6 +53,14 @@ export function RouteView({id, apiService}: Props){
         );
     }
 
+    const onRenderTrack = (trackInfo?: TrackInfo, index?: number) => {
+        return (
+            <div>
+                <Link>{trackInfo?.name}</Link>
+            </div>
+        );
+    }
+
     const monuments = pois.filter(t => t.type === "monument");
     const restaurants = pois.filter(t => t.type === "restaurant");
     const events = pois.filter(t => t.type === "event");
@@ -83,7 +92,9 @@ export function RouteView({id, apiService}: Props){
                 <div style={{overflowY: "scroll"}}>
                     <List items={events} onRenderCell={onRenderPoi}/>
                 </div>
-                <div></div>
+                <div style={{overflowY: "scroll"}}>
+                    <List items={route.tracks} onRenderCell={onRenderTrack}/>
+                </div>
                 <h3>Comentarios</h3>
                 <div></div>
                 <div className="commentsArea"></div>

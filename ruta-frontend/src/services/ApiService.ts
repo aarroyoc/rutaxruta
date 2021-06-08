@@ -1,4 +1,5 @@
 import CreateRouteRequest from "../models/CreateRouteRequest";
+import CreateTrackRequest from "../models/CreateTrackRequest";
 import Poi from "../models/Poi";
 import Route from "../models/Route";
 import Track from "../models/Track";
@@ -38,8 +39,24 @@ export class ApiService{
         .then(t => t.json())
     }
 
-    createRoute(request: CreateRouteRequest): Promise<string> {
+    createRoute(request: CreateRouteRequest): Promise<any> {
         return fetch(`${this.baseUrl}/route`, {
+            method: "POST",
+            body: JSON.stringify(request),
+            headers: {
+                "Authorization": `Bearer ${this.jwt}`,
+                "Content-Type": "application/json"
+            }
+        });
+    }
+
+    getTrack(id: string): Promise<Track> {
+        return fetch(`${this.baseUrl}/track/${id}`)
+        .then(t => t.json());
+    }
+
+    previewTrack(request: CreateTrackRequest): Promise<Track> {
+        return fetch(`${this.baseUrl}/track/preview`, {
             method: "POST",
             body: JSON.stringify(request),
             headers: {
@@ -49,9 +66,15 @@ export class ApiService{
         }).then(t => t.json());
     }
 
-    getTrack(id: string): Promise<Track> {
-        return fetch(`${this.baseUrl}/track/${id}`)
-        .then(t => t.json());
+    createTrack(request: CreateTrackRequest): Promise<any> {
+        return fetch(`${this.baseUrl}/track`, {
+            method: "POST",
+            body: JSON.stringify(request),
+            headers: {
+                "Authorization": `Bearer ${this.jwt}`,
+                "Content-Type": "application/json"
+            }
+        })
     }
 
 }

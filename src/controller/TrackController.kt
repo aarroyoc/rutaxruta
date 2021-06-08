@@ -7,7 +7,8 @@ import eu.adrianistan.features.DeleteRawTrack
 import eu.adrianistan.model.User
 import eu.adrianistan.repositories.route.RouteRepository
 import eu.adrianistan.repositories.track.RawTrackRepository
-import eu.adrianistan.usecase.GetTrack
+import eu.adrianistan.features.GetTrack
+import eu.adrianistan.features.PreviewTrack
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.features.*
@@ -23,6 +24,7 @@ fun Route.trackRouting() {
     val routeRepository = RouteRepository()
 
     val getTrack = GetTrack(rawTrackRepository)
+    val previewTrack = PreviewTrack()
     val createRawTrack = CreateRawTrack(rawTrackRepository, routeRepository)
     val deleteRawTrack = DeleteRawTrack(rawTrackRepository, routeRepository)
 
@@ -36,6 +38,12 @@ fun Route.trackRouting() {
         }
 
         authenticate {
+            post("/preview") {
+                val request = call.receive<TrackCreateRequest>()
+                val preview = previewTrack(request.gpx)
+                call.respond(preview.toDto())
+            }
+            
             post {
                 val request = call.receive<TrackCreateRequest>()
                 val user = call.authentication.principal<User>()

@@ -1,4 +1,4 @@
-package eu.adrianistan.usecase
+package eu.adrianistan.features
 
 import eu.adrianistan.model.Track
 import eu.adrianistan.repositories.track.RawTrackRepository

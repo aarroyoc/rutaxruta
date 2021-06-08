@@ -10,6 +10,7 @@ import './App.css';
 import { RouteListView } from './route/RouteListView';
 import RouteMaker from './maker/RouteMaker';
 import TrackView from './track/TrackView';
+import UploadTrackView from './track/UploadTrackView';
 
 function App() {
   // eslint-disable-next-line
@@ -29,13 +30,13 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Ruta x ruta x Castilla y León</h1>
+        <h1 className="App-header-title">Ruta x ruta x Castilla y León</h1>
         <nav className="App-header-links">
           <Link onClick={() => history.push("/") }>Catálogo de rutas</Link>
-          <Link href="">Viajes de los usuarios</Link>
+          <Link onClick={() => history.push("/upload-track/")}>Sube tu track</Link>
           <Link onClick={() => history.push("/maker/")}>Crea tu ruta</Link>
         </nav>
-        <nav>
+        <nav className="App-header-user">
           {user === null && 
           <GoogleLogin
             clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID || ""}
@@ -56,6 +57,9 @@ function App() {
           <Switch>
             <Route exact path="/">
               <RouteListView apiService={apiService}/>
+            </Route>
+            <Route path="/upload-track/">
+              <UploadTrackView apiService={apiService} user={user}/>
             </Route>
             <Route path="/maker/">
               <RouteMaker apiService={apiService} user={user}/>

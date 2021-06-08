@@ -2,7 +2,7 @@ package features
 
 import eu.adrianistan.repositories.poi.PoiRepository
 import eu.adrianistan.repositories.route.RouteRepository
-import eu.adrianistan.usecase.GetPoisNearRoute
+import eu.adrianistan.features.GetPoisNearRoute
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking

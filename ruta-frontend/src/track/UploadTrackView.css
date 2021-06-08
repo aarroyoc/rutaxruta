@@ -1,0 +1,18 @@
+.upload{
+    display: flex;
+    justify-content: center;
+}
+
+.uploadText{
+    max-width: 800px;
+}
+
+.uploadGrid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 25px;
+}
+
+.error{
+    color: red;
+}

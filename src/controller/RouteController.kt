@@ -9,7 +9,7 @@ import eu.adrianistan.model.RoutePoint
 import eu.adrianistan.model.User
 import eu.adrianistan.repositories.poi.PoiRepository
 import eu.adrianistan.repositories.route.RouteRepository
-import eu.adrianistan.usecase.GetPoisNearRoute
+import eu.adrianistan.features.GetPoisNearRoute
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.http.*

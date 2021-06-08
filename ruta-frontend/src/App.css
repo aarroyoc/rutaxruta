@@ -8,9 +8,19 @@
   justify-content: space-evenly;
   flex-wrap: wrap;
 }
+.App-header-title{
+  flex: 2;
+  text-align: center;
+}
 .App-header-links{
   display: flex;
+  justify-content: space-around;
+  flex: 1;
 }
+.App-header-user{
+  flex: 1;
+}
+
 .App-main{
   flex: 1;
   display: flex;
