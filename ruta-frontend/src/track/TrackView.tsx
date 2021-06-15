@@ -1,6 +1,6 @@
-import { CRS, Icon } from "leaflet";
+import { Icon } from "leaflet";
 import React, { useEffect, useState } from "react";
-import { MapContainer, Marker, Polyline, WMSTileLayer } from "react-leaflet";
+import { Marker, Polyline } from "react-leaflet";
 import { useParams } from "react-router-dom";
 import Track from "../models/Track";
 import { ApiService } from "../services/ApiService";
@@ -8,6 +8,7 @@ import { Color } from "./Color";
 import play_icon from "./play.svg";
 import flag_icon from "./flag.svg";
 import TrackLine from "../models/TrackLine";
+import MapBase from "../map/MapBase";
 
 type Props = {
     apiService: ApiService
@@ -70,12 +71,11 @@ function TrackView({apiService}: Props){
     return (
         <div>
             <h2>Track</h2>
-            {track && <MapContainer bounds={routeBounds()} scrollWheelZoom={true} style={{width: "500px", height: "500px"}}>
-                <WMSTileLayer url="http://orto.wms.itacyl.es/WMS?" format="image/jpeg" crs={CRS.EPSG4326} tileSize={256} layers="Ortofoto_2017" attribution="© ITaCyL. Junta de Castilla y León"/>
+            {track && <MapBase bounds={routeBounds()}>
                 {polylines}
                 {startMarker(track.segments)}
                 {endMarker(track.segments)}
-            </MapContainer>}
+            </MapBase>}
         </div>
     );
 }

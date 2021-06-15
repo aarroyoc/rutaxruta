@@ -1,6 +1,7 @@
 .routeView{
-    display: flex;
-    justify-content: space-evenly;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: auto;
 }
 
 .routeViewData {
@@ -11,6 +12,7 @@
 
 .routeViewData > h3 {
     color: #994b0b;
+    margin-left: 10px;
 }
 .commentsArea {
     grid-row: 6;

@@ -1,13 +1,16 @@
 import { List, Spinner, SpinnerSize, Link, Panel } from "@fluentui/react";
-import { MapContainer, GeoJSON, WMSTileLayer, Marker } from "react-leaflet";
+import { GeoJSON, Marker } from "react-leaflet";
 import React, { useEffect, useState } from "react";
 import Route from "../models/Route";
 import { ApiService } from "../services/ApiService";
-import { CRS } from "leaflet";
+import { Icon } from "leaflet";
 import "./RouteView.css";
 import Poi from "../models/Poi";
 import TrackInfo from "../models/TrackInfo";
 import { useHistory } from "react-router-dom";
+import MapBase from "../map/MapBase";
+import flag_icon from "./flag.svg";
+import play_icon from "./play.svg";
 
 type Props = {
     id: string,
@@ -63,6 +66,30 @@ export function RouteView({id, apiService}: Props){
         );
     }
 
+    const startMarker = (route: Route) => {
+        const point = route.geojson.geometry.coordinates.map((t: number[]) => [t[1], t[0]])[0];
+        const playIcon = new Icon({
+            iconUrl: play_icon,
+            iconAnchor: [10, 20],
+            iconSize: [27, 27]
+        });
+
+        return <Marker icon={playIcon} position={point}/>;
+    };
+
+    const endMarker = (route: Route) => {
+        const lastPos = route.geojson.geometry.coordinates.length - 1;
+        const point = route.geojson.geometry.coordinates.map((t: number[]) => [t[1], t[0]])[lastPos];
+        const flagIcon = new Icon({
+            iconUrl: flag_icon,
+            iconAnchor: [10, 20],
+            iconSize: [27, 27]
+        });
+        
+
+        return <Marker icon={flagIcon} position={point}/>;
+    }
+
     const monuments = pois.filter(t => t.type === "monument");
     const restaurants = pois.filter(t => t.type === "restaurant");
     const events = pois.filter(t => t.type === "event");
@@ -73,13 +100,14 @@ export function RouteView({id, apiService}: Props){
     )}
     {route && (
         <div className="routeView">
-            <MapContainer bounds={routeBounds()} scrollWheelZoom={true} style={{width: "500px", height: "500px"}}>
-                <WMSTileLayer url=" http://orto.wms.itacyl.es/WMS?" format="image/jpeg" crs={CRS.EPSG4326} tileSize={256} layers="Ortofoto_2017" attribution="© ITaCyL. Junta de Castilla y León"/>
+            <MapBase bounds={routeBounds()}>
                 <GeoJSON data={route.geojson} style={{color: "#8A430A", stroke: true, weight: 3}}/>
+                {startMarker(route)}
+                {endMarker(route)}
                 {openPanel && (
                     <Marker position={[pois[openPanel].lat, pois[openPanel].lon]}/>
                 )}
-            </MapContainer>
+            </MapBase>
             <div className="routeViewData">
                 <h3>Monumentos cercanos</h3>
                 <h3>Bares y restaurantes cercanos</h3>

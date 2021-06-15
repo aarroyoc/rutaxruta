@@ -1,34 +1,25 @@
-import { MapContainer, WMSTileLayer, Marker, useMapEvent, Polyline } from "react-leaflet";
-import { CRS, LatLng, LatLngTuple } from "leaflet";
+import { Marker, useMapEvent, Polyline } from "react-leaflet";
+import { LatLng } from "leaflet";
 
 import User from "../models/User";
 import { ApiService } from "../services/ApiService";
 import "./RouteMaker.css";
 import { useState } from "react";
-import { ChoiceGroup, PrimaryButton, TextField } from "@fluentui/react";
+import { PrimaryButton, TextField } from "@fluentui/react";
 import { useHistory } from "react-router";
+import MapBase from "../map/MapBase";
 
 type Props = {
     apiService: ApiService,
     user: User | null,
 }
 
-type WmsType = "ign" | "itacyl";
-
 export default function RouteMaker({apiService, user}: Props) {
     const history = useHistory();
-    const [wms, setWms] = useState<WmsType>("ign");
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
     const [route, setRoute] = useState<LatLng[]>([]);
     const [error, setError] = useState(false);
-
-    const wmsOptions = [
-        {key: "ign", text: "Mapa"},
-        {key: "itacyl", text: "Satélite"}
-    ];
-
-    const cylBounds = () => [[40.82, -6.06], [42.56, -6.06], [42.56, -3.33], [40.82, -3.33]] as LatLngTuple[];
 
     const ClickHandler = () => {
         useMapEvent("click", (evt) => {
@@ -83,11 +74,9 @@ export default function RouteMaker({apiService, user}: Props) {
                 {user !== null && (
                     <div className="makerEditor">
                         <div>
-                            <MapContainer bounds={cylBounds()} scrollWheelZoom={true} style={{width: "500px", height: "500px"}}>
-                                { wms === "ign" && <WMSTileLayer url="https://www.ign.es/wms-inspire/mapa-raster" format="image/png" crs={CRS.EPSG4326} tileSize={256} layers="mtn_rasterizado" attribution="© Instituto Geográfico Nacional"/> }
-                                { wms === "itacyl" && <WMSTileLayer url="http://orto.wms.itacyl.es/WMS?" format="image/jpeg" crs={CRS.EPSG4326} tileSize={256} layers="Ortofoto_2017" attribution="© ITaCyL. Junta de Castilla y León"/>}
-                                <ClickHandler/>
+                            <MapBase>
                                 <Polyline positions={route}/>
+                                <ClickHandler/>
                                 {route.length > 0 && (
                                     <Marker position={route[route.length-1]} eventHandlers={{
                                         click: () => {
@@ -97,10 +86,9 @@ export default function RouteMaker({apiService, user}: Props) {
                                         }
                                     }}/>
                                 )}
-                            </MapContainer>
+                            </MapBase>
                         </div>
                         <div>
-                            <ChoiceGroup defaultSelectedKey="ign" options={wmsOptions} onChange={(evt, option) => setWms(option?.key as WmsType)} label="Base" required={true}/>
                             <TextField value={name} label="Nombre" required onChange={(evt, newValue) => setName(newValue || "")}/>
                             <TextField value={description} label="Descripción" required multiline onChange={(evt, newValue) => setDescription(newValue || "")}/>
                             <br/>

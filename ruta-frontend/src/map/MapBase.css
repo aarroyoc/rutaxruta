@@ -1,0 +1,16 @@
+.mapBase{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+.mapContainer{
+    width: 100%;
+    height: 100vh;
+}
+
+.mapChoice{
+    display: flex;
+    justify-content: center;
+}
