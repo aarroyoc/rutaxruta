@@ -4,9 +4,11 @@ import eu.adrianistan.model.User
 import eu.adrianistan.repositories.user.entities.UserEntity
 
 object UserMother {
+    const val SOME_USER_ID = "1234567"
+
     fun build() =
         User(
-            id = "1234567",
+            id = SOME_USER_ID,
             name = "Fulanito",
             picture = "https://fulanito.com/img.png",
             type = "google",

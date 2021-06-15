@@ -3,6 +3,7 @@ import CreateTrackRequest from "../models/CreateTrackRequest";
 import Poi from "../models/Poi";
 import Route from "../models/Route";
 import Track from "../models/Track";
+import TrackInfo from "../models/TrackInfo";
 import User from "../models/User";
 
 export class ApiService{
@@ -75,6 +76,11 @@ export class ApiService{
                 "Content-Type": "application/json"
             }
         })
+    }
+
+    getTrackInfoByUser(userId: string): Promise<TrackInfo> {
+        return fetch(`${this.baseUrl}/track?user=${userId}`)
+        .then(t => t.json());
     }
 
 }

@@ -29,6 +29,13 @@ fun Route.trackRouting() {
     val deleteRawTrack = DeleteRawTrack(rawTrackRepository, routeRepository)
 
     route("/track") {
+        get {
+            val userId = call.request.queryParameters.getOrFail("user")
+            val tracksInfo = rawTrackRepository.getTracksInfoByUserId(userId)
+            val tracksInfoDto = tracksInfo.map { it.toDto() }
+            call.respond(tracksInfoDto)
+        }
+
         get("{id}") {
             val trackId = call.parameters.getOrFail("id")
             val track = getTrack(trackId)

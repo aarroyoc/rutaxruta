@@ -15,6 +15,7 @@ import mother.RawTrackMother.SOME_TRACK_ID
 import mother.RouteMother
 import mother.RouteMother.SOME_ROUTE_ID
 import mother.UserMother
+import mother.UserMother.SOME_USER_ID
 import java.io.File
 import kotlin.test.*
 
@@ -185,6 +186,35 @@ class TrackControllerTest {
                 addHeader(HttpHeaders.Authorization, "Bearer $token")
             }.apply {
                 assertEquals(HttpStatusCode.NotFound, this.response.status())
+            }
+        }
+    }
+
+    @Test
+    fun `get tracks of a non-existing user`() {
+        withTestApplication({module(testing = true)}) {
+            handleRequest(HttpMethod.Get, "/track?user=pepito").apply {
+                assertEquals(HttpStatusCode.OK, this.response.status())
+                assertEquals("[]", this.response.content)
+            }
+        }
+    }
+
+    @Test
+    fun `get tracks of a user`() {
+        val token = runBlocking {
+            generateToken()
+        }
+        runBlocking {
+            saveRawTrack()
+        }
+
+        withTestApplication({module(testing = true)}) {
+            handleRequest(HttpMethod.Get, "/track?user=$SOME_USER_ID") {
+                addHeader(HttpHeaders.Authorization, "Bearer $token")
+            }.apply {
+                assertEquals(HttpStatusCode.OK, this.response.status())
+                assertEquals("[{\"trackId\":\"123456\",\"name\":\"Castrodeza Ida\"}]", this.response.content)
             }
         }
     }

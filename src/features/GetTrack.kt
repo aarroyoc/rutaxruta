@@ -11,6 +11,6 @@ class GetTrack(
 
     suspend operator fun invoke(id: String): Track? =
         rawTrackRepository.getTrackById(id)?.let {
-            processGpxTrack(it.gpx.byteInputStream())
+            processGpxTrack(it.gpx.byteInputStream(), it.name)
         }
 }

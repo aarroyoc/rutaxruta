@@ -2,7 +2,10 @@ package eu.adrianistan.repositories.track
 
 import eu.adrianistan.Factory
 import eu.adrianistan.model.RawTrack
+import eu.adrianistan.model.TrackInfo
 import eu.adrianistan.repositories.track.entities.RawTrackEntity
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.toList
 import kotlinx.datetime.Instant
 import org.litote.kmongo.and
 import org.litote.kmongo.eq
@@ -12,6 +15,14 @@ class RawTrackRepository {
 
     suspend fun getTrackById(id: String): RawTrack? =
         collection.findOneById(id)?.toModel()
+
+    suspend fun getTracksInfoByUserId(userId: String): List<TrackInfo> =
+        collection.find(RawTrackEntity::userId eq userId).toFlow().map {
+            TrackInfo(
+                trackId = it._id ?: error("id should be defined by Mongo"),
+                name = it.name
+            )
+        }.toList()
 
     suspend fun saveRawTrack(rawTrack: RawTrack) =
         collection.save(rawTrack.toEntity())

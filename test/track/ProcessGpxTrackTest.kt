@@ -22,7 +22,7 @@ class ProcessGpxTrackTest {
     @Test
     fun `should process a no time GPX track`() {
         val gpx = File("test/track/no-time.gpx").inputStream()
-        val gpxInfo = processGpxTrack(gpx)
+        val gpxInfo = processGpxTrack(gpx, "No time GPX")
         assertEquals(2, gpxInfo.segments.size)
         assertEquals(41.6666000, gpxInfo.segments[0].latA)
         assertEquals(41.6666555, gpxInfo.segments[0].latB)
@@ -31,6 +31,7 @@ class ProcessGpxTrackTest {
         assertEquals(0.0, gpxInfo.segments[0].speed)
         assertEquals(0.0, gpxInfo.minSpeed)
         assertEquals(0.0, gpxInfo.maxSpeed)
+        assertEquals("No time GPX", gpxInfo.name)
     }
 
     @Test

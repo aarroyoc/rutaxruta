@@ -101,7 +101,7 @@ function UploadTrackView({apiService, user}: Props){
                 {user === null && (
                     <h3>Debes iniciar sesión para subir tracks</h3>
                 )}
-                {user === null && (
+                {user !== null && (
                     <div className="uploadGrid">
                         <Label>Nombre:</Label>
                         <TextField value={name} onChange={(evt) => setName(evt.currentTarget.value)}/>
