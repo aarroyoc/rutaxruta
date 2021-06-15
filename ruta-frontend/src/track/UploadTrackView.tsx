@@ -1,13 +1,13 @@
 import { ITag, Label, PrimaryButton, TagPicker, TextField } from "@fluentui/react";
-import { MapContainer, Polyline, WMSTileLayer } from "react-leaflet";
+import { Polyline } from "react-leaflet";
 import { useEffect, useState } from "react";
 import Track from "../models/Track";
 import User from "../models/User";
 import { ApiService } from "../services/ApiService";
 import { Color } from "./Color";
 import "./UploadTrackView.css";
-import { CRS } from "leaflet";
 import { useHistory } from "react-router-dom";
+import MapBase from "../map/MapBase";
 
 type Props = {
     apiService: ApiService,
@@ -101,7 +101,7 @@ function UploadTrackView({apiService, user}: Props){
                 {user === null && (
                     <h3>Debes iniciar sesión para subir tracks</h3>
                 )}
-                {user !== null && (
+                {user === null && (
                     <div className="uploadGrid">
                         <Label>Nombre:</Label>
                         <TextField value={name} onChange={(evt) => setName(evt.currentTarget.value)}/>
@@ -118,10 +118,9 @@ function UploadTrackView({apiService, user}: Props){
                     </div>
                 )}
                 <br/>
-                {track && <MapContainer bounds={routeBounds()} scrollWheelZoom={true} style={{width: "500px", height: "500px"}}>
-                    <WMSTileLayer url="http://orto.wms.itacyl.es/WMS?" format="image/jpeg" crs={CRS.EPSG4326} tileSize={256} layers="Ortofoto_2017" attribution="© ITaCyL. Junta de Castilla y León"/>
+                {track && <MapBase bounds={routeBounds()}>
                     {polylines}
-                </MapContainer>}
+                </MapBase>}
             </div>
         </div>
     );
