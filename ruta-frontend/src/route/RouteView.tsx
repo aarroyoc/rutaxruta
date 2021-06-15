@@ -7,6 +7,7 @@ import { CRS } from "leaflet";
 import "./RouteView.css";
 import Poi from "../models/Poi";
 import TrackInfo from "../models/TrackInfo";
+import { useHistory } from "react-router-dom";
 
 type Props = {
     id: string,
@@ -14,6 +15,7 @@ type Props = {
 };
 
 export function RouteView({id, apiService}: Props){
+    const history = useHistory();
     const [route, setRoute] = useState<Route | null>(null);
     const [openPanel, setOpenPanel] = useState<number | undefined>(undefined);
     const [pois, setPois] = useState<Poi[]>([]);
@@ -56,7 +58,7 @@ export function RouteView({id, apiService}: Props){
     const onRenderTrack = (trackInfo?: TrackInfo, index?: number) => {
         return (
             <div>
-                <Link>{trackInfo?.name}</Link>
+                <Link onClick={() => history.push(`/track/${trackInfo?.trackId}`)}>{trackInfo?.name}</Link>
             </div>
         );
     }

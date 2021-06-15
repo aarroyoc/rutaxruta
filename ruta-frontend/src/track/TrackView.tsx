@@ -1,10 +1,13 @@
-import { CRS } from "leaflet";
+import { CRS, Icon } from "leaflet";
 import React, { useEffect, useState } from "react";
-import { MapContainer, Polyline, WMSTileLayer } from "react-leaflet";
+import { MapContainer, Marker, Polyline, WMSTileLayer } from "react-leaflet";
 import { useParams } from "react-router-dom";
 import Track from "../models/Track";
 import { ApiService } from "../services/ApiService";
 import { Color } from "./Color";
+import play_icon from "./play.svg";
+import flag_icon from "./flag.svg";
+import TrackLine from "../models/TrackLine";
 
 type Props = {
     apiService: ApiService
@@ -32,6 +35,28 @@ function TrackView({apiService}: Props){
         return <Polyline positions={[[segment.latA, segment.lonA], [segment.latB, segment.lonB]]} color={lineColor} weight={3}/>
     });
 
+    const startMarker = (segments: TrackLine[]) => {
+        const playIcon = new Icon({
+            iconUrl: play_icon,
+            iconAnchor: [10, 20],
+            iconSize: [27, 27]
+        });
+
+        return <Marker icon={playIcon} position={[segments[0].latA, segments[0].lonA]}/>;
+    };
+
+    const endMarker = (segments: TrackLine[]) => {
+        const flagIcon = new Icon({
+            iconUrl: flag_icon,
+            iconAnchor: [10, 20],
+            iconSize: [27, 27]
+        });
+        const lastPos = segments.length - 1;
+
+        return <Marker icon={flagIcon} position={[segments[lastPos].latA, segments[lastPos].lonA]}/>;
+    }
+    
+
     const routeBounds = (): any => {
         if(track){
             const minLat = track.segments.map(t => t.latA).reduce((prev, current) => Math.min(prev, current));
@@ -48,6 +73,8 @@ function TrackView({apiService}: Props){
             {track && <MapContainer bounds={routeBounds()} scrollWheelZoom={true} style={{width: "500px", height: "500px"}}>
                 <WMSTileLayer url="http://orto.wms.itacyl.es/WMS?" format="image/jpeg" crs={CRS.EPSG4326} tileSize={256} layers="Ortofoto_2017" attribution="© ITaCyL. Junta de Castilla y León"/>
                 {polylines}
+                {startMarker(track.segments)}
+                {endMarker(track.segments)}
             </MapContainer>}
         </div>
     );
