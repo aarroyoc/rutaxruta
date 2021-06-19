@@ -1,0 +1,7 @@
+.userProfileBio{
+    display: flex;
+    align-items: center;
+}
+.userProfileBio > * {
+    margin-left: 25px;
+}

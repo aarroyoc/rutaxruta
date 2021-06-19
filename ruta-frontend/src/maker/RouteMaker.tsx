@@ -65,7 +65,7 @@ export default function RouteMaker({apiService, user}: Props) {
     return (
         <div className="maker">
             <div className="makerText">
-                <h2>Crea tu ruta</h2>
+                <h2>Propón tu ruta</h2>
                 <p>Diseña tu ruta con el mapa presente en esta página. Es muy recomendable que la ruta que crees la hayas realizado con anterioridad. Todas las rutas son revisadas por el equipo de Ruta x Ruta antes de ser publicadas.</p>
                 <p>Haz click para añadir un punto, que se conectará con el anterior por línea recta. Haz click sobre el último punto para borrarlo.</p>
                 {user === null && (
@@ -92,7 +92,7 @@ export default function RouteMaker({apiService, user}: Props) {
                             <TextField value={name} label="Nombre" required onChange={(evt, newValue) => setName(newValue || "")}/>
                             <TextField value={description} label="Descripción" required multiline onChange={(evt, newValue) => setDescription(newValue || "")}/>
                             <br/>
-                            <PrimaryButton text="Publicar ruta" onClick={publish}/>
+                            <PrimaryButton text="Proponer ruta" onClick={publish}/>
                             <br/>
                             { error && <p className="error">Ha habido un error a la hora de publicar la ruta. Revisa los datos.</p> }
                         </div>

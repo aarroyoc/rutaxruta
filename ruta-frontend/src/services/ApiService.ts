@@ -25,6 +25,11 @@ export class ApiService{
         }}).then(t => t.json());
     }
 
+    getUser(userId: string): Promise<User> {
+        return fetch(`${this.baseUrl}/user/${userId}`)
+        .then(t => t.json());
+    }
+
     getRoute(id: string): Promise<Route> {
         return fetch(`${this.baseUrl}/route/${id}`)
         .then(t => t.json());
@@ -56,6 +61,15 @@ export class ApiService{
         .then(t => t.json());
     }
 
+    deleteTrack(id: string): Promise<any> {
+        return fetch(`${this.baseUrl}/track/${id}`, {
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${this.jwt}`,
+            }
+        });
+    }
+
     previewTrack(request: CreateTrackRequest): Promise<Track> {
         return fetch(`${this.baseUrl}/track/preview`, {
             method: "POST",
@@ -78,7 +92,7 @@ export class ApiService{
         })
     }
 
-    getTrackInfoByUser(userId: string): Promise<TrackInfo> {
+    getTrackInfoByUser(userId: string): Promise<TrackInfo[]> {
         return fetch(`${this.baseUrl}/track?user=${userId}`)
         .then(t => t.json());
     }

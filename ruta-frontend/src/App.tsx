@@ -11,6 +11,7 @@ import { RouteListView } from './route/RouteListView';
 import RouteMaker from './maker/RouteMaker';
 import TrackView from './track/TrackView';
 import UploadTrackView from './track/UploadTrackView';
+import UserProfile from './profile/UserProfile';
 
 function App() {
   // eslint-disable-next-line
@@ -34,7 +35,7 @@ function App() {
         <nav className="App-header-links">
           <Link onClick={() => history.push("/") }>Catálogo de rutas</Link>
           <Link onClick={() => history.push("/upload-track/")}>Sube tu track</Link>
-          <Link onClick={() => history.push("/maker/")}>Crea tu ruta</Link>
+          <Link onClick={() => history.push("/maker/")}>Propón tu ruta</Link>
         </nav>
         <nav className="App-header-user">
           {user === null && 
@@ -69,6 +70,9 @@ function App() {
             </Route>
             <Route path="/track/:id">
               <TrackView apiService={apiService} key={location.pathname}/>
+            </Route>
+            <Route path="/user/:id">
+              <UserProfile apiService={apiService} user={user}/>
             </Route>
           </Switch>
         </main>
