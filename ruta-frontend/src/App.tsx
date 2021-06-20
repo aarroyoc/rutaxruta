@@ -48,7 +48,7 @@ function App() {
             />
           }
           {user !== null && <div className="username">
-            <p>{user.name}</p>
+            <p><Link onClick={() => history.push(`/user/${user.id}`)}>{user.name}</Link></p>
             <img width="32" height="32" alt="" src={user.picture}/>
           </div>}
         </nav>

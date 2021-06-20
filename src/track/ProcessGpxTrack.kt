@@ -2,6 +2,7 @@ package eu.adrianistan.track
 
 import eu.adrianistan.model.Track
 import eu.adrianistan.model.TrackLine
+import eu.adrianistan.model.User
 import io.jenetics.jpx.GPX
 import io.jenetics.jpx.Length
 import io.jenetics.jpx.geom.Geoid
@@ -10,7 +11,7 @@ import java.io.InputStream
 import java.time.Duration
 
 class ProcessGpxTrack {
-    operator fun invoke(gpxStream: InputStream, name: String = ""): Track {
+    operator fun invoke(gpxStream: InputStream, user: User, name: String = ""): Track {
         val track = GPX.read(gpxStream).tracks.first()
         val points = track.segments.flatMap { it.points }
         if(points.size < 2) {
@@ -42,6 +43,7 @@ class ProcessGpxTrack {
 
         return Track(
             name = name,
+            user = user,
             segments = lines,
             maxSpeed = lines.map { it.speed }.percentile(99.0) ?: 0.0,
             minSpeed = lines.map { it.speed }.minOrNull() ?: 0.0

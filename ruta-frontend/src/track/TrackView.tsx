@@ -1,7 +1,7 @@
 import { Icon } from "leaflet";
 import React, { useEffect, useState } from "react";
 import { Marker, Polyline } from "react-leaflet";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import Track from "../models/Track";
 import { ApiService } from "../services/ApiService";
 import { Color } from "./Color";
@@ -9,12 +9,14 @@ import play_icon from "./play.svg";
 import flag_icon from "./flag.svg";
 import TrackLine from "../models/TrackLine";
 import MapBase from "../map/MapBase";
+import { Link } from "@fluentui/react";
 
 type Props = {
     apiService: ApiService
 }
 
 function TrackView({apiService}: Props){
+    const history = useHistory();
     const params = useParams();
     const { id }: any = params;
     const [track, setTrack] = useState<Track|null>(null);
@@ -70,7 +72,7 @@ function TrackView({apiService}: Props){
 
     return (
         <div>
-            <h2>Track</h2>
+            {track && <h2>Track "{track.name}" por <Link onClick={() => history.push(`/user/${track.userId}`)}>{track.userName}</Link></h2> }
             {track && <MapBase bounds={routeBounds()}>
                 {polylines}
                 {startMarker(track.segments)}

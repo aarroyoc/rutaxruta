@@ -9,6 +9,7 @@ import eu.adrianistan.repositories.route.RouteRepository
 import eu.adrianistan.repositories.track.RawTrackRepository
 import eu.adrianistan.features.GetTrack
 import eu.adrianistan.features.PreviewTrack
+import eu.adrianistan.repositories.user.UserRepository
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.features.*
@@ -22,8 +23,9 @@ import io.ktor.util.*
 fun Route.trackRouting() {
     val rawTrackRepository = RawTrackRepository()
     val routeRepository = RouteRepository()
+    val userRepository = UserRepository()
 
-    val getTrack = GetTrack(rawTrackRepository)
+    val getTrack = GetTrack(rawTrackRepository, userRepository)
     val previewTrack = PreviewTrack()
     val createRawTrack = CreateRawTrack(rawTrackRepository, routeRepository)
     val deleteRawTrack = DeleteRawTrack(rawTrackRepository, routeRepository)
