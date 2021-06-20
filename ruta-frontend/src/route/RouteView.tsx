@@ -21,7 +21,7 @@ export function RouteView({id, apiService}: Props){
     const history = useHistory();
     const [route, setRoute] = useState<Route | null>(null);
     const [openPanel, setOpenPanel] = useState<number | undefined>(undefined);
-    const [pois, setPois] = useState<Poi[]>([]);
+    const [pois, setPois] = useState<Poi[]|null>(null);
 
     useEffect(() => {
         apiService.getRoute(id).then(newRoute => {
@@ -42,7 +42,7 @@ export function RouteView({id, apiService}: Props){
     }
 
     const onRenderPoi = (poi?: Poi, index?: number) => {
-        const poiIndex = pois.findIndex(t => t.name === poi?.name);
+        const poiIndex = pois?.findIndex(t => t.name === poi?.name);
         return (
             <div>
                 <Link onClick={() => setOpenPanel(poiIndex)}>{poi?.name}</Link>
@@ -90,9 +90,9 @@ export function RouteView({id, apiService}: Props){
         return <Marker icon={flagIcon} position={point}/>;
     }
 
-    const monuments = pois.filter(t => t.type === "monument");
-    const restaurants = pois.filter(t => t.type === "restaurant");
-    const events = pois.filter(t => t.type === "event");
+    const monuments = pois?.filter(t => t.type === "monument");
+    const restaurants = pois?.filter(t => t.type === "restaurant");
+    const events = pois?.filter(t => t.type === "event");
 
     return (<>
     {!route && (
@@ -104,33 +104,19 @@ export function RouteView({id, apiService}: Props){
                 <GeoJSON data={route.geojson} style={{color: "#8A430A", stroke: true, weight: 3}}/>
                 {startMarker(route)}
                 {endMarker(route)}
-                {openPanel && (
+                {openPanel && pois !== null && (
                     <Marker position={[pois[openPanel].lat, pois[openPanel].lon]}/>
                 )}
             </MapBase>
             <div className="routeViewData">
                 <h3>Monumentos cercanos</h3>
                 <h3>Bares y restaurantes cercanos</h3>
-                <div style={{overflowY: "scroll"}}>
-                    <List items={monuments} onRenderCell={onRenderPoi}/>
-                </div>
-                <div style={{overflowY: "scroll"}}>
-                    <List items={restaurants} onRenderCell={onRenderPoi}/>
-                </div>
+                {(monuments !== undefined && <List style={{marginLeft: "10px", overflowY: "auto"}} items={monuments} onRenderCell={onRenderPoi}/>) || <Spinner size={SpinnerSize.medium}/>}
+                {(restaurants !== undefined && <List style={{marginLeft: "10px", overflowY: "auto"}} items={restaurants} onRenderCell={onRenderPoi}/>) || <Spinner size={SpinnerSize.medium}/>}
                 <h3>Eventos próximos cercanos</h3>
                 <h3>Tracks de los usuarios</h3>
-                <div style={{overflowY: "scroll"}}>
-                    <List items={events} onRenderCell={onRenderPoi}/>
-                </div>
-                <div style={{overflowY: "scroll"}}>
-                    <List items={route.tracks} onRenderCell={onRenderTrack}/>
-                </div>
-                <h3>Comentarios</h3>
-                <div></div>
-                <div className="commentsArea"></div>
-                <h3>Imágenes</h3>
-                <div></div>
-                <div className="imagesArea"></div>
+                {(events !== undefined && <List style={{marginLeft: "10px", overflowY: "auto"}} items={events} onRenderCell={onRenderPoi}/>) || <Spinner size={SpinnerSize.medium}/>}
+                <List style={{marginLeft: "10px", overflowY: "auto"}} items={route.tracks} onRenderCell={onRenderTrack}/>
             </div>
         </div>
     )}

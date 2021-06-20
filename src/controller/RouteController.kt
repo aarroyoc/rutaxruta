@@ -63,8 +63,6 @@ fun Route.routeRouting() {
                                 id = null,
                                 name = request.name,
                                 description = request.description,
-                                comments = emptyList(),
-                                media = emptyList(),
                                 points = convertGeoJsonToPoints(request.geojson),
                                 userId = user.id ?: error("Invalid user"),
                                 status = eu.adrianistan.model.Route.RouteState.IN_REVIEW,

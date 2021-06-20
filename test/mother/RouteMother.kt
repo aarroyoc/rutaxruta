@@ -13,9 +13,7 @@ object RouteMother {
             id = SOME_ROUTE_ID,
             name = "Valladolid - Cigales por Canal de Castilla",
             description = "Vamos de Valladolid a Cigales siguiendo el Canal de Castilla<br>Pasamos al lado del ITaCyl",
-            comments = emptyList(),
             userId = "some-user-id",
-            media = emptyList(),
             points = listOf(
                 RoutePoint(41.66008825124748, -4.733734130859375),
                 RoutePoint(41.671116673793016, -4.725494384765625),

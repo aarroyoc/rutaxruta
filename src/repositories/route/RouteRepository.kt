@@ -29,10 +29,8 @@ class RouteRepository {
             points = this.points.coordinates.map { coordinates ->
                 RoutePoint(coordinates[1], coordinates[0])
             },
-            media = emptyList(),
             name = this.name,
             description = this.description,
-            comments = emptyList(),
             status = Route.RouteState.valueOf(this.status.uppercase()),
             tracks = this.tracks.map { it.toModel() }
         )
