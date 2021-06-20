@@ -33,6 +33,7 @@ class TrackControllerTest {
     @Test
     fun `get a single track`() {
         runBlocking {
+            generateToken()
             saveRawTrack()
         }
         withTestApplication({ module(testing = true)}) {
