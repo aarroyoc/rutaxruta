@@ -12,6 +12,7 @@ import org.litote.kmongo.*
 
 class RouteRepository {
     private val collection = Factory.getDatabase().getCollection<RouteEntity>("route")
+    private val timeProvider = Factory.getTimeProvider()
 
     suspend fun listPublishedRoutes(): List<Route> =
         collection.find(RouteEntity::status eq "published").toList().map {
@@ -47,18 +48,29 @@ class RouteRepository {
             ),
             userId = route.userId,
             status = route.status.value,
-            tracks = emptyList()
+            tracks = emptyList(),
+            createdAt = timeProvider.getLocalDateTime(),
+            updatedAt = timeProvider.getLocalDateTime()
         )
         collection.insertOne(routeEntity)
         return routeEntity._id
     }
 
     suspend fun addTrack(routeId: String, trackInfo: TrackInfo) {
-        collection.updateOne(RouteEntity::_id eq routeId, push(RouteEntity::tracks, trackInfo.toEntity()))
+        collection.updateOne(RouteEntity::_id eq routeId,
+            combine(
+                push(RouteEntity::tracks, trackInfo.toEntity()),
+                set(RouteEntity::updatedAt setTo timeProvider.getLocalDateTime())
+        ))
     }
 
     suspend fun removeTrack(trackId: String) {
-        collection.updateMany(RouteEntity::tracks / TrackInfoEntity::trackId eq trackId, pullByFilter(RouteEntity::tracks, TrackInfoEntity::trackId eq trackId))
+        collection.updateMany(RouteEntity::tracks / TrackInfoEntity::trackId eq trackId,
+            combine(
+                pullByFilter(RouteEntity::tracks, TrackInfoEntity::trackId eq trackId),
+                set(RouteEntity::updatedAt setTo timeProvider.getLocalDateTime())
+            )
+        )
     }
 
     suspend fun deleteRoute(routeId: String): Boolean =

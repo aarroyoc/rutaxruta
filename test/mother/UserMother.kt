@@ -2,9 +2,11 @@ package mother
 
 import eu.adrianistan.model.User
 import eu.adrianistan.repositories.user.entities.UserEntity
+import kotlinx.datetime.LocalDateTime
 
 object UserMother {
     const val SOME_USER_ID = "1234567"
+    val SOME_TIMESTAMP = LocalDateTime(2021,6,21,23,53, 0)
 
     fun build() =
         User(
@@ -22,7 +24,9 @@ object UserMother {
                 type = it.type,
                 providerId = it.providerId,
                 name = it.name,
-                picture = it.picture
+                picture = it.picture,
+                createdAt = SOME_TIMESTAMP,
+                updatedAt = SOME_TIMESTAMP
             )
         }
 }

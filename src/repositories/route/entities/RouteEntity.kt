@@ -1,6 +1,7 @@
 package eu.adrianistan.repositories.route.entities
 
 import eu.adrianistan.route.entities.GeoJsonLineString
+import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -12,5 +13,7 @@ data class RouteEntity (
     val points: GeoJsonLineString,
     val userId: String,
     val status: String,
-    val tracks: List<TrackInfoEntity>
+    val tracks: List<TrackInfoEntity>,
+    val createdAt: LocalDateTime,
+    val updatedAt: LocalDateTime
 )

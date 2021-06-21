@@ -12,6 +12,7 @@ import org.litote.kmongo.eq
 
 class RawTrackRepository {
     private val collection = Factory.getDatabase().getCollection<RawTrackEntity>("track")
+    private val timeProvider = Factory.getTimeProvider()
 
     suspend fun getTrackById(id: String): RawTrack? =
         collection.findOneById(id)?.toModel()
@@ -45,6 +46,8 @@ class RawTrackRepository {
             name = this.name,
             gpx = this.gpx,
             timestamp = this.timestamp.epochSeconds,
-            userId = this.userId
+            userId = this.userId,
+            createdAt = timeProvider.getLocalDateTime(),
+            updatedAt = timeProvider.getLocalDateTime()
         )
 }

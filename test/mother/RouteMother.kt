@@ -5,9 +5,12 @@ import eu.adrianistan.model.RoutePoint
 import eu.adrianistan.model.User
 import eu.adrianistan.route.entities.GeoJsonLineString
 import eu.adrianistan.repositories.route.entities.RouteEntity
+import kotlinx.datetime.LocalDateTime
 
 object RouteMother {
     const val SOME_ROUTE_ID = "1235678"
+    val SOME_TIMESTAMP = LocalDateTime(2021,6,21,23,53, 0)
+
     fun build(): Route =
         Route(
             id = SOME_ROUTE_ID,
@@ -42,7 +45,9 @@ object RouteMother {
             ),
             userId = route.userId,
             status = route.status.value,
-            tracks = emptyList()
+            tracks = emptyList(),
+            createdAt = SOME_TIMESTAMP,
+            updatedAt = SOME_TIMESTAMP
         )
     }
 }

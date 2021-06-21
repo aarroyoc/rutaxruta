@@ -3,10 +3,14 @@ package eu.adrianistan.repositories.user
 import eu.adrianistan.Factory
 import eu.adrianistan.model.User
 import eu.adrianistan.repositories.user.entities.UserEntity
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import org.litote.kmongo.eq
 
 class UserRepository {
     private val collection = Factory.getDatabase().getCollection<UserEntity>("user")
+    private val timeProvider = Factory.getTimeProvider()
 
     suspend fun getUser(id: String) =
         collection.findOneById(id)?.toModel()
@@ -27,7 +31,9 @@ class UserRepository {
             type = this.type,
             providerId = this.providerId,
             name = this.name,
-            picture = this.picture
+            picture = this.picture,
+            createdAt = timeProvider.getLocalDateTime(),
+            updatedAt = timeProvider.getLocalDateTime()
         )
 
     private fun UserEntity.toModel(): User =
