@@ -6,10 +6,12 @@ import eu.adrianistan.model.User
 import eu.adrianistan.route.entities.GeoJsonLineString
 import eu.adrianistan.repositories.route.entities.RouteEntity
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
 
 object RouteMother {
     const val SOME_ROUTE_ID = "1235678"
-    val SOME_TIMESTAMP = LocalDateTime(2021,6,21,23,53, 0)
+    val SOME_TIMESTAMP = LocalDateTime(2021,6,21,23,53, 0).toString()
 
     fun build(): Route =
         Route(

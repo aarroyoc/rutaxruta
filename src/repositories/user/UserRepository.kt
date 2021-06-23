@@ -32,8 +32,8 @@ class UserRepository {
             providerId = this.providerId,
             name = this.name,
             picture = this.picture,
-            createdAt = timeProvider.getLocalDateTime(),
-            updatedAt = timeProvider.getLocalDateTime()
+            createdAt = timeProvider.getLocalDateTime().toString(),
+            updatedAt = timeProvider.getLocalDateTime().toString()
         )
 
     private fun UserEntity.toModel(): User =

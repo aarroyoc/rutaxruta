@@ -3,10 +3,12 @@ package mother
 import eu.adrianistan.model.User
 import eu.adrianistan.repositories.user.entities.UserEntity
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
 
 object UserMother {
     const val SOME_USER_ID = "1234567"
-    val SOME_TIMESTAMP = LocalDateTime(2021,6,21,23,53, 0)
+    val SOME_TIMESTAMP = LocalDateTime(2021,6,21,23,53, 0).toString()
 
     fun build() =
         User(

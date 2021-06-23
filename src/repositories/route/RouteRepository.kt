@@ -49,8 +49,8 @@ class RouteRepository {
             userId = route.userId,
             status = route.status.value,
             tracks = emptyList(),
-            createdAt = timeProvider.getLocalDateTime(),
-            updatedAt = timeProvider.getLocalDateTime()
+            createdAt = timeProvider.getLocalDateTime().toString(),
+            updatedAt = timeProvider.getLocalDateTime().toString()
         )
         collection.insertOne(routeEntity)
         return routeEntity._id
@@ -60,7 +60,7 @@ class RouteRepository {
         collection.updateOne(RouteEntity::_id eq routeId,
             combine(
                 push(RouteEntity::tracks, trackInfo.toEntity()),
-                set(RouteEntity::updatedAt setTo timeProvider.getLocalDateTime())
+                set(RouteEntity::updatedAt setTo timeProvider.getLocalDateTime().toString())
         ))
     }
 
@@ -68,7 +68,7 @@ class RouteRepository {
         collection.updateMany(RouteEntity::tracks / TrackInfoEntity::trackId eq trackId,
             combine(
                 pullByFilter(RouteEntity::tracks, TrackInfoEntity::trackId eq trackId),
-                set(RouteEntity::updatedAt setTo timeProvider.getLocalDateTime())
+                set(RouteEntity::updatedAt setTo timeProvider.getLocalDateTime().toString())
             )
         )
     }

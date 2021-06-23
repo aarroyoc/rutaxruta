@@ -47,7 +47,7 @@ class RawTrackRepository {
             gpx = this.gpx,
             timestamp = this.timestamp.epochSeconds,
             userId = this.userId,
-            createdAt = timeProvider.getLocalDateTime(),
-            updatedAt = timeProvider.getLocalDateTime()
+            createdAt = timeProvider.getLocalDateTime().toString(),
+            updatedAt = timeProvider.getLocalDateTime().toString()
         )
 }
