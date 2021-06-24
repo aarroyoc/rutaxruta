@@ -89,6 +89,7 @@ function App() {
             <li><a href="https://datosabiertos.jcyl.es/web/jcyl/set/es/cultura-ocio/monumentos/1284325843131">Monumentos de Castilla y León - Junta de Castilla y León</a></li>
             <li><a href="https://datosabiertos.jcyl.es/web/jcyl/set/es/turismo/bares/1284211832884">Bares de Castilla y León - Junta de Castilla y León</a></li>
             <li><a href="https://datosabiertos.jcyl.es/web/jcyl/set/es/cultura-ocio/agenda_cultural/1284806871500">Agenda cultural de Castilla y León - Junta de Castilla y León</a></li>
+            <li>Icono de la aplicación: <a href="https://www.flaticon.es/icono-gratis/correr-por-senderos_3163782?term=trail&related_id=3163782">Flaticon / photo3idea_studio</a></li>
           </ul>
           <p>Agradecemos enormemente poder disponer de estos datos</p>
           <DialogFooter>
