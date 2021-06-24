@@ -10,7 +10,7 @@
         <logback_version>1.2.1</logback_version>
         <ktor_version>1.6.0</ktor_version>
         <kotlin.code.style>official</kotlin.code.style>
-        <kotlin_version>1.5.10</kotlin_version>
+        <kotlin_version>1.5.20</kotlin_version>
         <serialization.version>1.2.1</serialization.version>
         <datetime.version>0.2.1</datetime.version>
         <jts.version>1.16.1</jts.version>

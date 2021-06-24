@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from '@fluentui/react';
+import { Dialog, DialogFooter, Link, PrimaryButton } from '@fluentui/react';
 import GoogleLogin from 'react-google-login';
 import { Switch, Route, useHistory, useLocation } from "react-router-dom";
 
@@ -17,6 +17,7 @@ function App() {
   // eslint-disable-next-line
   const [apiService, setApiService] = useState(new ApiService());
   const [user, setUser] = useState<User|null>(null);
+  const [showCopyright, setShowCopyright] = useState(false);
 
   const history = useHistory();
   const location = useLocation();
@@ -78,7 +79,22 @@ function App() {
         </main>
       </div>
       <footer className="App-footer">
-        <a href="https://adrianistan.eu">&copy; Adrián Arroyo Calle 2021 - Data from XXX</a>
+        <a href="https://adrianistan.eu">&copy; Adrián Arroyo Calle 2021</a> - <Link onClick={() => setShowCopyright(true)}>¿De dónde vienen estos datos?</Link>
+        <Dialog hidden={!showCopyright} onDismiss={() => setShowCopyright(false)}>
+          <h2>Origen de los datos</h2>
+          <p>Ruta x ruta no sería lo mismo si no fuese por las fuentes de datos abiertos de las que bebe:</p>
+          <ul>
+            <li><a href="https://www.ign.es/web/ign/portal/ide-area-nodo-ide-ign">Mapa de España - Instituto Geográfico Nacional</a></li>
+            <li><a href="https://idecyl.jcyl.es/geonetwork/srv/spa/catalog.search#/metadata/SPAGOBCYLITADTSOIOIT">Ortofoto de Castilla y León 2017 - ITaCyl</a></li>
+            <li><a href="https://datosabiertos.jcyl.es/web/jcyl/set/es/cultura-ocio/monumentos/1284325843131">Monumentos de Castilla y León - Junta de Castilla y León</a></li>
+            <li><a href="https://datosabiertos.jcyl.es/web/jcyl/set/es/turismo/bares/1284211832884">Bares de Castilla y León - Junta de Castilla y León</a></li>
+            <li><a href="https://datosabiertos.jcyl.es/web/jcyl/set/es/cultura-ocio/agenda_cultural/1284806871500">Agenda cultural de Castilla y León - Junta de Castilla y León</a></li>
+          </ul>
+          <p>Agradecemos enormemente poder disponer de estos datos</p>
+          <DialogFooter>
+            <PrimaryButton onClick={() => setShowCopyright(false)} text="Entendido"/>
+          </DialogFooter>
+        </Dialog>
       </footer>
     </div>
   );
