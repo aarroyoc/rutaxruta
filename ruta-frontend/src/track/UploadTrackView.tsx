@@ -89,7 +89,7 @@ function UploadTrackView({apiService, user}: Props){
                 gpx: gpx,
                 routeId: routeId
             };
-            apiService.createTrack(request).then(() => history.push("/"));
+            apiService.createTrack(request).then(() => history.push(`/user/${user?.id}`));
         }
     }
 

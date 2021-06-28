@@ -50,9 +50,10 @@ function UserProfile({user, apiService}: Props) {
     };
 
     const deleteTracks = () => {
-        selectedTracks?.forEach((track: any) => {
-            apiService.deleteTrack(track.trackId);
-        })
+        const deleteCalls = selectedTracks!!.map((track: any) => {
+            return apiService.deleteTrack(track.trackId);
+        });
+        Promise.all(deleteCalls).then(() =>  apiService.getTrackInfoByUser(id).then(newTracks => setTracks(newTracks)));
     };
 
     const copyUrlToClipboard = () => {

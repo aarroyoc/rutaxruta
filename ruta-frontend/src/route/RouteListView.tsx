@@ -1,4 +1,4 @@
-import { getFocusStyle, getTheme, Icon, ITheme, List, mergeStyleSets, SearchBox } from "@fluentui/react";
+import { getFocusStyle, getTheme, Icon, ITheme, List, mergeStyleSets, SearchBox, Spinner, SpinnerSize } from "@fluentui/react";
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import Route from "../models/Route";
@@ -110,6 +110,7 @@ export function RouteListView({apiService}: Props) {
                 </div>
             </div>
             <List items={filteredRoutes} onRenderCell={onRenderCell}/>
+            {routes.length === 0 && <Spinner size={SpinnerSize.large} label="Cargando rutas por Castilla y León..."/>}
         </div>
     );
 }

@@ -6,7 +6,6 @@ import { ApiService } from "../services/ApiService";
 import "./RouteMaker.css";
 import { useState } from "react";
 import { PrimaryButton, TextField } from "@fluentui/react";
-import { useHistory } from "react-router";
 import MapBase from "../map/MapBase";
 
 type Props = {
@@ -15,11 +14,11 @@ type Props = {
 }
 
 export default function RouteMaker({apiService, user}: Props) {
-    const history = useHistory();
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
     const [route, setRoute] = useState<LatLng[]>([]);
     const [error, setError] = useState(false);
+    const [success, setSuccess] = useState(false);
 
     const ClickHandler = () => {
         useMapEvent("click", (evt) => {
@@ -55,7 +54,7 @@ export default function RouteMaker({apiService, user}: Props) {
                 }
             }
         }).then(() => {
-            history.push("/");
+            setSuccess(true);
         }).catch(() => {
             setError(true);
         });
@@ -95,6 +94,7 @@ export default function RouteMaker({apiService, user}: Props) {
                             <PrimaryButton text="Proponer ruta" onClick={publish}/>
                             <br/>
                             { error && <p className="error">Ha habido un error a la hora de publicar la ruta. Revisa los datos.</p> }
+                            { success && <p className="success">La ruta ha sido creada y se encuentra en moderación.</p>}
                         </div>
                     </div>
                 )}
