@@ -7,6 +7,9 @@ type Track = {
     minSpeed: number,
     maxSpeed: number,
     segments: TrackLine[],
+    duration: number,
+    distance: number,
+    meanSpeed: number,
 }
 
 export default Track;

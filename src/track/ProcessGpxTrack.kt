@@ -13,6 +13,7 @@ import java.time.Duration
 class ProcessGpxTrack {
     operator fun invoke(gpxStream: InputStream, user: User, name: String = ""): Track {
         val track = GPX.read(gpxStream).tracks.first()
+        var distance = 0.0
         val points = track.segments.flatMap { it.points }
         if(points.size < 2) {
             throw IllegalArgumentException("not enough points in GPX")
@@ -25,6 +26,7 @@ class ProcessGpxTrack {
             val pointB = points[j]
 
             val length = Geoid.WGS84.distance(pointA, pointB)
+            distance += length.to(Length.Unit.METER)
             val speed = if(pointA.time.isPresent && pointB.time.isPresent){
                 val timeInterval = Duration.between(pointA.time.get(), pointB.time.get())
                 length.to(Length.Unit.METER) / timeInterval.seconds
@@ -41,12 +43,24 @@ class ProcessGpxTrack {
             ))
         }
 
+
+        val duration = if(points.first().time.isPresent && points.last().time.isPresent) {
+            Duration.between(points.first().time.get(), points.last().time.get()).toSeconds()
+        } else {
+            null
+        }
+
+        val meanSpeed = duration?.let { (distance*3600) / (duration * 1000)}
+
         return Track(
             name = name,
             user = user,
             segments = lines,
             maxSpeed = lines.map { it.speed }.percentile(99.0) ?: 0.0,
-            minSpeed = lines.map { it.speed }.minOrNull() ?: 0.0
+            minSpeed = lines.map { it.speed }.minOrNull() ?: 0.0,
+            duration = duration,
+            distance = distance.toLong(),
+            meanSpeed = meanSpeed
         )
     }
 }

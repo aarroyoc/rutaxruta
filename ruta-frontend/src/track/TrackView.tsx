@@ -10,6 +10,7 @@ import flag_icon from "./flag.svg";
 import TrackLine from "../models/TrackLine";
 import MapBase from "../map/MapBase";
 import { Link } from "@fluentui/react";
+import "./TrackView.css";
 
 type Props = {
     apiService: ApiService
@@ -70,6 +71,21 @@ function TrackView({apiService}: Props){
         }
     }
 
+    const formatDuration = (duration: number) => {
+        const seconds = duration % 60;
+        let minutes = Math.floor(duration / 60);
+        const hours = Math.floor(minutes / 60);
+        minutes = minutes % 60;
+
+        return `${hours}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+    }
+
+    const formatDistance = (distance: number) => {
+        const km = Math.floor(distance / 1000);
+        const meter = distance % 1000;
+        return `${km},${String(meter).padStart(3, "0")} km`;
+    }
+
     return (
         <div>
             {track && <h2>Track "{track.name}" por <Link onClick={() => history.push(`/user/${track.userId}`)}>{track.userName}</Link></h2> }
@@ -78,6 +94,18 @@ function TrackView({apiService}: Props){
                 {startMarker(track.segments)}
                 {endMarker(track.segments)}
             </MapBase>}
+            {track && <div className="trackDataWrapper">
+            <div className="trackData">
+                <label>Duración</label>
+                <span>{formatDuration(track.duration)}</span>
+                <label>Distancia</label>
+                <span>{formatDistance(track.distance)}</span>
+                <label>Velocidad media</label>
+                <span>{track.meanSpeed} km/h</span>
+                <label>Velocidad máxima</label>
+                <span>{track.maxSpeed*3.6} km/h</span>
+            </div>
+            </div>}
         </div>
     );
 }
