@@ -25,6 +25,8 @@ class ProcessGpxTrackTest {
         assertEquals(5107, gpxInfo.segments.size)
         assertEquals(0.0, gpxInfo.minSpeed)
         assert(gpxInfo.maxSpeed > 8.0)
+        assertEquals(25.565336791937256, gpxInfo.points[10].distance)
+        assertEquals(692.4, gpxInfo.points[10].elevation)
     }
 
     @Test

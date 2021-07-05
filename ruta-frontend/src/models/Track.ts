@@ -1,4 +1,5 @@
 import TrackLine from "./TrackLine";
+import TrackPoint from "./TrackPoint";
 
 type Track = {
     name: string,
@@ -10,6 +11,7 @@ type Track = {
     duration: number,
     distance: number,
     meanSpeed: number,
+    points: TrackPoint[],
 }
 
 export default Track;

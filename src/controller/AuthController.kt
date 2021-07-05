@@ -13,7 +13,7 @@ import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 
-fun Route.authRouting(httpClient: HttpClient) {
+fun Route.authRouting() {
     val userRepository = UserRepository()
 
     post("/token") {

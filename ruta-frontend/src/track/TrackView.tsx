@@ -11,6 +11,8 @@ import TrackLine from "../models/TrackLine";
 import MapBase from "../map/MapBase";
 import { Link } from "@fluentui/react";
 import "./TrackView.css";
+import { VegaLite } from "react-vega";
+import { Handler } from "vega-tooltip";
 
 type Props = {
     apiService: ApiService
@@ -86,6 +88,20 @@ function TrackView({apiService}: Props){
         return `${km},${String(meter).padStart(3, "0")} km`;
     }
 
+    const spec = {
+        width: 400,
+        height: 200,
+        mark: {
+            type: "line",
+            tooltip: true
+        },
+        encoding: {
+            x: { field: "distance", title: "Distancia", type: "quantitative"},
+            y: { field: "elevation", title: "Elevación", type: "quantitative", scale: {zero: false}}
+        },
+        data: {name: "table"}
+    }
+
     return (
         <div>
             {track && <h2>Track "{track.name}" por <Link onClick={() => history.push(`/user/${track.userId}`)}>{track.userName}</Link></h2> }
@@ -105,6 +121,7 @@ function TrackView({apiService}: Props){
                 <label>Velocidad máxima</label>
                 <span>{track.maxSpeed*3.6} km/h</span>
             </div>
+            <VegaLite spec={spec as any} data={{table: track.points}} tooltip={new Handler().call}/>
             </div>}
         </div>
     );

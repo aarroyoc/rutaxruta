@@ -9,4 +9,5 @@ data class Track(
     val duration: Long?,
     val distance: Long,
     val meanSpeed: Double?,
+    val points: List<TrackPoint>,
 )

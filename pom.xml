@@ -8,7 +8,7 @@
     <description>rutaxruta</description>
     <properties>
         <logback_version>1.2.1</logback_version>
-        <ktor_version>1.6.0</ktor_version>
+        <ktor_version>1.6.1</ktor_version>
         <kotlin.code.style>official</kotlin.code.style>
         <kotlin_version>1.5.20</kotlin_version>
         <serialization.version>1.2.1</serialization.version>
@@ -106,6 +106,18 @@
             <groupId>io.ktor</groupId>
             <artifactId>ktor-server-tests</artifactId>
             <version>${ktor_version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-test</artifactId>
+            <version>${kotlin_version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-test-junit</artifactId>
+            <version>${kotlin_version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>

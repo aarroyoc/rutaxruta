@@ -25,12 +25,6 @@ fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 @Suppress("unused") // Referenced in application.conf
 @kotlin.jvm.JvmOverloads
 fun Application.module(testing: Boolean = false) {
-    val httpClient = HttpClient(Apache) {
-        install(JsonFeature) {
-            serializer = KotlinxSerializer()
-        }
-    }
-
     install(Locations)
 
     val userRepository = UserRepository()
@@ -65,7 +59,7 @@ fun Application.module(testing: Boolean = false) {
     }
 
     routing {
-        authRouting(httpClient)
+        authRouting()
         routeRouting()
         trackRouting()
         userRouting()

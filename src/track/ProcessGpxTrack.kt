@@ -2,6 +2,7 @@ package eu.adrianistan.track
 
 import eu.adrianistan.model.Track
 import eu.adrianistan.model.TrackLine
+import eu.adrianistan.model.TrackPoint
 import eu.adrianistan.model.User
 import io.jenetics.jpx.GPX
 import io.jenetics.jpx.Length
@@ -19,6 +20,16 @@ class ProcessGpxTrack {
             throw IllegalArgumentException("not enough points in GPX")
         }
         val lines = mutableListOf<TrackLine>()
+        val trackPoints = mutableListOf<TrackPoint>()
+        val elevationSupplier = {
+            Length.of(0.0, Length.Unit.METER)
+        }
+        trackPoints.add(
+            TrackPoint(
+                distance = 0.0,
+                elevation = points[0].elevation.orElseGet(elevationSupplier).to(Length.Unit.METER)
+            )
+        )
 
         for (i in 0..points.size-2) {
             val j = i + 1
@@ -27,6 +38,14 @@ class ProcessGpxTrack {
 
             val length = Geoid.WGS84.distance(pointA, pointB)
             distance += length.to(Length.Unit.METER)
+
+            trackPoints.add(
+                TrackPoint(
+                    distance = distance,
+                    elevation = pointB.elevation.orElseGet(elevationSupplier).to(Length.Unit.METER)
+                )
+            )
+
             val speed = if(pointA.time.isPresent && pointB.time.isPresent){
                 val timeInterval = Duration.between(pointA.time.get(), pointB.time.get())
                 length.to(Length.Unit.METER) / timeInterval.seconds
@@ -56,11 +75,12 @@ class ProcessGpxTrack {
             name = name,
             user = user,
             segments = lines,
-            maxSpeed = lines.map { it.speed }.percentile(99.0) ?: 0.0,
+            maxSpeed = lines.map { it.speed }.percentile(99.0),
             minSpeed = lines.map { it.speed }.minOrNull() ?: 0.0,
             duration = duration,
             distance = distance.toLong(),
-            meanSpeed = meanSpeed
+            meanSpeed = meanSpeed,
+            points = trackPoints
         )
     }
 }

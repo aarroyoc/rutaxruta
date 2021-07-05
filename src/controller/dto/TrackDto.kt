@@ -14,6 +14,7 @@ data class TrackDto(
     val duration: Long?,
     val distance: Long,
     val meanSpeed: Double?,
+    val points: List<TrackPointDto>
 )
 
 fun Track.toDto(): TrackDto = TrackDto(
@@ -25,7 +26,8 @@ fun Track.toDto(): TrackDto = TrackDto(
     segments = segments.map { it.toDto() },
     duration = duration,
     distance = distance,
-    meanSpeed = meanSpeed
+    meanSpeed = meanSpeed,
+    points = points.map { it.toDto() }
 )
 
 
