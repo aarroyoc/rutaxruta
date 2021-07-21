@@ -117,9 +117,9 @@ function TrackView({apiService}: Props){
                 <label>Distancia</label>
                 <span>{formatDistance(track.distance)}</span>
                 <label>Velocidad media</label>
-                <span>{track.meanSpeed} km/h</span>
+                <span>{track.meanSpeed.toFixed(2)} km/h</span>
                 <label>Velocidad máxima</label>
-                <span>{track.maxSpeed*3.6} km/h</span>
+                <span>{(track.maxSpeed*3.6).toFixed(2)} km/h</span>
             </div>
             <VegaLite spec={spec as any} data={{table: track.points}} tooltip={new Handler().call}/>
             </div>}
