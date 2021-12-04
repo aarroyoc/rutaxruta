@@ -15,7 +15,7 @@ class ProcessGpxTrack {
     operator fun invoke(gpxStream: InputStream, user: User, name: String = ""): Track {
         val track = GPX.read(gpxStream).tracks.first()
         var distance = 0.0
-        val points = track.segments.flatMap { it.points }
+        val points = track.segments.flatMap { it.points }.distinctBy { it.time }
         if(points.size < 2) {
             throw IllegalArgumentException("not enough points in GPX")
         }

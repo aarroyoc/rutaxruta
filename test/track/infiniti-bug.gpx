@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx creator="StravaGPX Android" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd" version="1.1" xmlns="http://www.topografix.com/GPX/1/1">
+    <metadata>
+        <time>2021-12-04T08:58:55Z</time>
+    </metadata>
+    <trk>
+        <name>BTT Trashumancia</name>
+        <type>1</type>
+        <trkseg>
+            <trkpt lat="41.8652650" lon="-4.5139990">
+                <ele>718.5</ele>
+                <time>2021-12-04T10:02:22Z</time>
+            </trkpt>
+            <trkpt lat="41.8652630" lon="-4.5140000">
+                <ele>718.5</ele>
+                <time>2021-12-04T10:02:24Z</time>
+            </trkpt>
+            <trkpt lat="41.8652620" lon="-4.5140020">
+                <ele>718.5</ele>
+                <time>2021-12-04T10:02:24Z</time>
+            </trkpt>
+        </trkseg>
+    </trk>
+</gpx>

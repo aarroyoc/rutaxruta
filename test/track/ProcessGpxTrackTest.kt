@@ -80,4 +80,12 @@ class ProcessGpxTrackTest {
         assertEquals(0.0, gpxInfo.minSpeed)
         assertEquals(0.0, gpxInfo.maxSpeed)
     }
+
+    @Test
+    fun `should process Infinity bug file correctly`() {
+        val gpx = File("test/track/infiniti-bug.gpx").inputStream()
+        val gpxInfo = processGpxTrack(gpx, fakeUser)
+        assertEquals(0.11857484432594374, gpxInfo.segments[0].speed)
+        assertEquals(1, gpxInfo.segments.size)
+    }
 }
