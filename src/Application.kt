@@ -55,7 +55,8 @@ fun Application.module(testing: Boolean = false) {
         header(HttpHeaders.Authorization)
         allowCredentials = true
         allowNonSimpleContentTypes = true
-        anyHost() // @TODO: Don't do this in production if possible. Try to limit it.
+        host("localhost")
+        host("rutaxruta.com")
     }
 
     routing {

@@ -10,12 +10,15 @@ import io.jenetics.jpx.geom.Geoid
 import org.nield.kotlinstatistics.percentile
 import java.io.InputStream
 import java.time.Duration
+import java.time.ZonedDateTime
+import java.util.*
 
 class ProcessGpxTrack {
     operator fun invoke(gpxStream: InputStream, user: User, name: String = ""): Track {
         val track = GPX.read(gpxStream).tracks.first()
         var distance = 0.0
-        val points = track.segments.flatMap { it.points }.distinctBy { it.time }
+        val times = mutableSetOf<Optional<ZonedDateTime>>()
+        val points = track.segments.flatMap { it.points }.filter { !it.time.isPresent || times.add(it.time) }
         if(points.size < 2) {
             throw IllegalArgumentException("not enough points in GPX")
         }

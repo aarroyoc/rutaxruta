@@ -3,22 +3,22 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.adrianistan</groupId>
     <artifactId>rutaxruta</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
     <name>rutaxruta</name>
     <description>rutaxruta</description>
     <properties>
-        <logback_version>1.2.1</logback_version>
-        <ktor_version>1.6.1</ktor_version>
+        <logback_version>1.2.7</logback_version>
+        <ktor_version>1.6.6</ktor_version>
         <kotlin.code.style>official</kotlin.code.style>
-        <kotlin_version>1.5.20</kotlin_version>
-        <serialization.version>1.2.1</serialization.version>
-        <datetime.version>0.2.1</datetime.version>
-        <jts.version>1.16.1</jts.version>
-        <jpx_version>2.2.0</jpx_version>
-        <kmongo_version>4.2.6</kmongo_version>
-        <google_version>1.31.2</google_version>
+        <kotlin_version>1.6.0</kotlin_version>
+        <serialization.version>1.3.1</serialization.version>
+        <datetime.version>0.3.1</datetime.version>
+        <jts.version>1.18.2</jts.version>
+        <jpx_version>2.3.0</jpx_version>
+        <kmongo_version>4.4.0</kmongo_version>
+        <google_version>1.32.2</google_version>
         <kotlin_statistics>1.2.1</kotlin_statistics>
-        <mockk_version>1.10.6</mockk_version>
+        <mockk_version>1.12.1</mockk_version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
         <main.class>io.ktor.server.netty.EngineMain</main.class>
