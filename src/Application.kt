@@ -53,11 +53,9 @@ fun Application.module(testing: Boolean = false) {
         method(HttpMethod.Delete)
         method(HttpMethod.Patch)
         header(HttpHeaders.Authorization)
-        allowCredentials = true
-        allowNonSimpleContentTypes = true
-        host("localhost")
-        host("rutaxruta.com")
-        host("rutaxruta.azurewebsites.net")
+        header(HttpHeaders.ContentType)
+        allowCredentials = false
+        anyHost()
     }
 
     routing {
