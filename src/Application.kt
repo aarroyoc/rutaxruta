@@ -57,6 +57,7 @@ fun Application.module(testing: Boolean = false) {
         allowNonSimpleContentTypes = true
         host("localhost")
         host("rutaxruta.com")
+        host("rutaxruta.azurewebsites.net")
     }
 
     routing {
