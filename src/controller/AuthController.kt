@@ -7,11 +7,10 @@ import eu.adrianistan.config.JwtConfig
 import eu.adrianistan.config.Settings
 import eu.adrianistan.model.User
 import eu.adrianistan.repositories.user.UserRepository
-import io.ktor.application.*
-import io.ktor.client.*
-import io.ktor.request.*
-import io.ktor.response.*
-import io.ktor.routing.*
+import io.ktor.server.application.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 
 fun Route.authRouting() {
     val userRepository = UserRepository()

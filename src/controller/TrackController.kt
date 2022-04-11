@@ -10,14 +10,14 @@ import eu.adrianistan.repositories.track.RawTrackRepository
 import eu.adrianistan.features.GetTrack
 import eu.adrianistan.features.PreviewTrack
 import eu.adrianistan.repositories.user.UserRepository
-import io.ktor.application.*
-import io.ktor.auth.*
-import io.ktor.features.*
+import io.ktor.server.application.*
+import io.ktor.server.auth.*
 import io.ktor.http.*
-import io.ktor.request.*
-import io.ktor.response.*
-import io.ktor.routing.*
-import io.ktor.util.*
+import io.ktor.server.plugins.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
+import io.ktor.server.util.*
 
 
 fun Route.trackRouting() {

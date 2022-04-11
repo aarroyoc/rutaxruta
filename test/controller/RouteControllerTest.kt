@@ -7,6 +7,8 @@ import eu.adrianistan.module
 import eu.adrianistan.repositories.poi.entities.PoiEntity
 import eu.adrianistan.repositories.route.entities.RouteEntity
 import eu.adrianistan.repositories.user.entities.UserEntity
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import kotlin.test.*
 import io.ktor.server.testing.*
 import kotlinx.coroutines.runBlocking
@@ -23,153 +25,100 @@ class RouteControllerTest {
             Factory.getDatabase().dropCollection("poi")
         }
     }
+
     @Test
-    fun `get non-existing route`() {
-        withTestApplication({ module(testing = true) }) {
-            handleRequest(HttpMethod.Get, "/route/12345").apply {
-                assertEquals(HttpStatusCode.NotFound, response.status())
-            }
-        }
+    fun `get non-existing route`() = testApplication {
+        val response = client.get("/route/12345")
+        assertEquals(HttpStatusCode.NotFound, response.status)
     }
 
     @Test
-    fun `get existing route`() {
-        val routeId = runBlocking {
-            saveRoute()
-        }
-        withTestApplication({ module(testing = true) }) {
-            handleRequest(HttpMethod.Get, "/route/$routeId").apply {
-                assert(response.content?.contains("Valladolid - Cigales por Canal de Castilla") ?: false)
-                assertEquals(HttpStatusCode.OK, response.status())
-            }
-        }
+    fun `get existing route`() = testApplication {
+        val routeId = saveRoute()
+        val response = client.get("/route/$routeId")
+        assert(response.bodyAsText().contains("Valladolid - Cigales por Canal de Castilla"))
+        assertEquals(HttpStatusCode.OK, response.status)
     }
 
     @Test
-    fun `list existing routes`() {
-        runBlocking {
-            saveRoute()
-        }
-        withTestApplication({ module(testing = true) }) {
-            handleRequest(HttpMethod.Get, "/route").apply {
-                assert(response.content?.contains("Valladolid - Cigales por Canal de Castilla") ?: false)
-                assertEquals(HttpStatusCode.OK, response.status())
-            }
-        }
+    fun `list existing routes`() = testApplication {
+        saveRoute()
+        val response = client.get("/route")
+        assert(response.bodyAsText().contains("Valladolid - Cigales por Canal de Castilla"))
+        assertEquals(HttpStatusCode.OK, response.status)
     }
 
     @Test
-    fun `should successfully post a new route`() {
-        val token = runBlocking {
-            generateToken()
+    fun `should successfully post a new route`() = testApplication {
+        val token = generateToken()
+        val response = client.post("/route") {
+            header(HttpHeaders.ContentType, ContentType.Application.Json.toString())
+            header(HttpHeaders.Authorization, "Bearer $token")
+            setBody(VALID_ROUTE)
         }
-        withTestApplication({ module(testing = true) }) {
-            handleRequest(HttpMethod.Post, "/route") {
-                addHeader(HttpHeaders.ContentType, ContentType.Application.Json.toString())
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
-                setBody(VALID_ROUTE)
-            }.apply {
-                assertEquals(HttpStatusCode.Created, response.status())
-            }
-        }
+        assertEquals(HttpStatusCode.Created, response.status)
     }
 
     @Test
-    fun `should reject the new route as invalid`() {
-        val token = runBlocking {
-            generateToken()
+    fun `should reject the new route as invalid`() = testApplication {
+        val token = generateToken()
+        val response = client.post("/route") {
+            header(HttpHeaders.ContentType, ContentType.Application.Json.toString())
+            header(HttpHeaders.Authorization, "Bearer $token")
+            setBody(INVALID_ROUTE)
         }
-        withTestApplication({ module(testing = true) }) {
-            handleRequest(HttpMethod.Post, "/route") {
-                addHeader(HttpHeaders.ContentType, ContentType.Application.Json.toString())
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
-                setBody(INVALID_ROUTE)
-            }.apply {
-                assertEquals(HttpStatusCode.BadRequest, response.status())
-            }
-        }
+        assertEquals(HttpStatusCode.BadRequest, response.status)
     }
 
     @Test
-    fun `should successfully delete a route`() {
-        val routeId = runBlocking {
-            saveRoute()
+    fun `should successfully delete a route`() = testApplication {
+        val routeId = saveRoute()
+        val token = generateToken()
+        val response = client.delete("/route/$routeId") {
+            header(HttpHeaders.Authorization, "Bearer $token")
         }
-        val token = runBlocking {
-            generateToken()
-        }
-        withTestApplication({ module(testing = true) }) {
-            handleRequest(HttpMethod.Delete, "/route/$routeId") {
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
-            }.apply {
-                assertEquals(HttpStatusCode.NoContent, response.status())
-            }
-        }
+        assertEquals(HttpStatusCode.NoContent, response.status)
     }
 
     @Test
-    fun `should give an error when deleting a non-existing route`() {
-        val token = runBlocking {
-            generateToken()
+    fun `should give an error when deleting a non-existing route`() = testApplication {
+        val token = generateToken()
+        val response = client.delete("/route/123456") {
+            header(HttpHeaders.Authorization, "Bearer $token")
         }
-        withTestApplication({ module(testing = true) }) {
-            handleRequest(HttpMethod.Delete, "/route/123456") {
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
-            }.apply {
-                assertEquals(HttpStatusCode.NotFound, response.status())
-            }
-        }
+        assertEquals(HttpStatusCode.NotFound, response.status)
     }
 
     @Test
-    fun `should return a list of near pois`() {
-        val routeId = runBlocking {
-            savePoi()
-            saveRoute()
+    fun `should return a list of near pois`() = testApplication {
+        savePoi()
+        val routeId = saveRoute()
+        val token = generateToken()
+        val response = client.get("/route/$routeId/near") {
+            header(HttpHeaders.Authorization, "Bearer $token")
         }
-        val token = runBlocking {
-            generateToken()
-        }
-        withTestApplication({ module(testing = true) }) {
-            handleRequest(HttpMethod.Get, "/route/$routeId/near") {
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
-            }.apply {
-                assertEquals(HttpStatusCode.OK, response.status())
-                assert(response.content?.contains("Monumento 1") ?: false)
-            }
-        }
+        assertEquals(HttpStatusCode.OK, response.status)
+        assert(response.bodyAsText().contains("Monumento 1"))
     }
 
     @Test
-    fun `should return an empty list of near pois`() {
-        val routeId = runBlocking {
-            saveRoute()
+    fun `should return an empty list of near pois`() = testApplication {
+        val routeId = saveRoute()
+        val token = generateToken()
+        val response = client.get("/route/$routeId/near") {
+            header(HttpHeaders.Authorization, "Bearer $token")
         }
-        val token = runBlocking {
-            generateToken()
-        }
-        withTestApplication({ module(testing = true) }) {
-            handleRequest(HttpMethod.Get, "/route/$routeId/near") {
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
-            }.apply {
-                assertEquals(HttpStatusCode.OK, response.status())
-                assertEquals(response.content, "[]")
-            }
-        }
+        assertEquals(HttpStatusCode.OK, response.status)
+        assertEquals("[]", response.bodyAsText())
     }
 
     @Test
-    fun `should return 404 if route doesn't exist while looking for pois`() {
-        val token = runBlocking {
-            generateToken()
+    fun `should return 404 if route doesn't exist while looking for pois`() = testApplication {
+        val token = generateToken()
+        val response = client.get("/route/123456/near") {
+            header(HttpHeaders.Authorization, "Bearer $token")
         }
-        withTestApplication({ module(testing = true) }) {
-            handleRequest(HttpMethod.Get, "/route/123456/near") {
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
-            }.apply {
-                assertEquals(HttpStatusCode.NotFound, response.status())
-            }
-        }
+        assertEquals(HttpStatusCode.NotFound, response.status)
     }
 
     private suspend fun saveRoute(): String? {

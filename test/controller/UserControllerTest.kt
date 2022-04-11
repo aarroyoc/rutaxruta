@@ -4,6 +4,8 @@ import eu.adrianistan.Factory
 import eu.adrianistan.config.JwtConfig
 import eu.adrianistan.module
 import eu.adrianistan.repositories.user.entities.UserEntity
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.server.testing.*
 import kotlinx.coroutines.runBlocking
@@ -20,41 +22,28 @@ class UserControllerTest {
     }
 
     @Test
-    fun `get me when authenticated`() {
-        val token = runBlocking {
-            generateToken()
+    fun `get me when authenticated`() = testApplication {
+        val token = generateToken()
+        val response = client.get("/user/me") {
+            header(HttpHeaders.Authorization, "Bearer $token")
         }
-        withTestApplication({module(testing = true)}) {
-            handleRequest(HttpMethod.Get, "/user/me") {
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
-            }.apply {
-                assertEquals(HttpStatusCode.OK, this.response.status())
-                assertEquals("""{"id":"1234567","name":"Fulanito","picture":"https://fulanito.com/img.png"}""", this.response.content)
-            }
-        }
+        assertEquals(HttpStatusCode.OK, response.status)
+        assertEquals("""{"id":"1234567","name":"Fulanito","picture":"https://fulanito.com/img.png"}""", response.bodyAsText())
     }
 
     @Test
-    fun `get me when not authenticated`() {
-        withTestApplication({module(testing = true)}) {
-            handleRequest(HttpMethod.Get, "/user/me").apply {
-                assertEquals(HttpStatusCode.Unauthorized, this.response.status())
-            }
-        }
+    fun `get me when not authenticated`() = testApplication {
+        val response = client.get("/user/me")
+        assertEquals(HttpStatusCode.Unauthorized, response.status)
     }
 
     @Test
-    fun `get another user, not authenticated`() {
-        runBlocking {
-            generateToken()
-        }
+    fun `get another user, not authenticated`() = testApplication {
+        generateToken()
         val userId = "1234567"
-        withTestApplication({module(testing = true)}) {
-            handleRequest(HttpMethod.Get, "/user/$userId").apply {
-                assertEquals(HttpStatusCode.OK, this.response.status())
-                assertEquals("""{"id":"1234567","name":"Fulanito","picture":"https://fulanito.com/img.png"}""", this.response.content)
-            }
-        }
+        val response = client.get("/user/$userId")
+        assertEquals(HttpStatusCode.OK, response.status)
+        assertEquals("""{"id":"1234567","name":"Fulanito","picture":"https://fulanito.com/img.png"}""", response.bodyAsText())
     }
 
     private suspend fun generateToken(): String {

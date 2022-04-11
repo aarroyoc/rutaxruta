@@ -6,6 +6,8 @@ import eu.adrianistan.module
 import eu.adrianistan.repositories.route.entities.RouteEntity
 import eu.adrianistan.repositories.track.entities.RawTrackEntity
 import eu.adrianistan.repositories.user.entities.UserEntity
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.server.testing.*
 import kotlinx.coroutines.runBlocking
@@ -31,193 +33,134 @@ class TrackControllerTest {
     }
 
     @Test
-    fun `get a single track`() {
-        runBlocking {
-            generateToken()
-            saveRawTrack()
-        }
-        withTestApplication({ module(testing = true)}) {
-            handleRequest(HttpMethod.Get, "/track/$SOME_TRACK_ID").apply {
-                assertEquals(HttpStatusCode.OK, this.response.status())
-            }
-        }
+    fun `get a single track`() = testApplication {
+        generateToken()
+        saveRawTrack()
+        val response = client.get("/track/$SOME_TRACK_ID")
+        assertEquals(HttpStatusCode.OK, response.status)
     }
 
     @Test
-    fun `get a non-existant single track`() {
-        withTestApplication({ module(testing = true)}) {
-            handleRequest(HttpMethod.Get, "/track/$SOME_OTHER_TRACK_ID").apply {
-                assertEquals(HttpStatusCode.NotFound, this.response.status())
-            }
-        }
+    fun `get a non-existant single track`() = testApplication {
+        val response = client.get("/track/$SOME_OTHER_TRACK_ID")
+        assertEquals(HttpStatusCode.NotFound, response.status)
     }
 
     @Test
-    fun `submit a valid track`() {
-        val token = runBlocking {
-            generateToken()
+    fun `submit a valid track`() = testApplication {
+        val token = generateToken()
+        val gpxText = File("test/track/castrodeza.gpx").readText().replace("\"", "\\\"")
+        val response = client.post("/track") {
+            header(HttpHeaders.ContentType, ContentType.Application.Json.toString())
+            header(HttpHeaders.Authorization, "Bearer $token")
+            setBody("""{"name": "Castrodeza Ida", "gpx": "$gpxText"}""")
         }
+        assertEquals(HttpStatusCode.Created, response.status)
+    }
+
+    @Test
+    fun `submit a valid track and associate with a route`() = testApplication {
+        saveRoute()
+        val token = generateToken()
+        val gpxText = File("test/track/castrodeza.gpx").readText().replace("\"", "\\\"")
+        val response = client.post("/track") {
+            header(HttpHeaders.ContentType, ContentType.Application.Json.toString())
+            header(HttpHeaders.Authorization, "Bearer $token")
+            setBody("""{"name": "Castrodeza Ida", "gpx": "$gpxText", "routeId": "$SOME_ROUTE_ID"}""")
+        }
+        assertEquals(HttpStatusCode.Created, response.status)
+
+        val response2 = client.get("/route/$SOME_ROUTE_ID")
+        assertEquals(HttpStatusCode.OK, response2.status)
+        assert(response2.bodyAsText().contains("Castrodeza Ida"))
+    }
+
+    @Test
+    fun `submit a valid track, associate with a route and delete it`() = testApplication {
+        saveRoute()
+        val token = generateToken()
 
         val gpxText = File("test/track/castrodeza.gpx").readText().replace("\"", "\\\"")
 
-        withTestApplication({ module(testing = true)}) {
-            handleRequest(HttpMethod.Post, "/track") {
-                addHeader(HttpHeaders.ContentType, ContentType.Application.Json.toString())
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
-                setBody("""{"name": "Castrodeza Ida", "gpx": "$gpxText"}""")
-            }.apply {
-                assertEquals(HttpStatusCode.Created, this.response.status())
-            }
+        val response = client.post("/track") {
+            header(HttpHeaders.ContentType, ContentType.Application.Json.toString())
+            header(HttpHeaders.Authorization, "Bearer $token")
+            setBody("""{"name": "Castrodeza Ida", "gpx": "$gpxText", "routeId": "$SOME_ROUTE_ID"}""")
         }
+        assertEquals(HttpStatusCode.Created, response.status)
+
+        val response2 = client.get("/route/$SOME_ROUTE_ID")
+        assertEquals(HttpStatusCode.OK, response2.status)
+        assert(response2.bodyAsText().contains("Castrodeza Ida"))
+
+        val trackId = getTrackId()
+        val response3 = client.delete("/track/$trackId") {
+            header(HttpHeaders.Authorization, "Bearer $token")
+        }
+        assertEquals(HttpStatusCode.NoContent, response3.status)
+
+        val response4 = client.get("/route/$SOME_ROUTE_ID")
+        assertEquals(HttpStatusCode.OK, response4.status)
+        assertFalse(response4.bodyAsText().contains("Castrodeza Ida"))
     }
 
     @Test
-    fun `submit a valid track and associate with a route`() {
-        val token = runBlocking {
-            saveRoute()
-            generateToken()
-        }
-
-        val gpxText = File("test/track/castrodeza.gpx").readText().replace("\"", "\\\"")
-
-        withTestApplication({ module(testing = true)}) {
-            handleRequest(HttpMethod.Post, "/track") {
-                addHeader(HttpHeaders.ContentType, ContentType.Application.Json.toString())
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
-                setBody("""{"name": "Castrodeza Ida", "gpx": "$gpxText", "routeId": "$SOME_ROUTE_ID"}""")
-            }.apply {
-                assertEquals(HttpStatusCode.Created, this.response.status())
-            }
-
-            handleRequest(HttpMethod.Get, "/route/$SOME_ROUTE_ID").apply {
-                assertEquals(HttpStatusCode.OK, this.response.status())
-                assert(this.response.content?.contains("Castrodeza Ida") ?: false)
-            }
-        }
-    }
-
-    @Test
-    fun `submit a valid track, associate with a route and delete it`() {
-        val token = runBlocking {
-            saveRoute()
-            generateToken()
-        }
-
-        val gpxText = File("test/track/castrodeza.gpx").readText().replace("\"", "\\\"")
-
-        withTestApplication({ module(testing = true)}) {
-            handleRequest(HttpMethod.Post, "/track") {
-                addHeader(HttpHeaders.ContentType, ContentType.Application.Json.toString())
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
-                setBody("""{"name": "Castrodeza Ida", "gpx": "$gpxText", "routeId": "$SOME_ROUTE_ID"}""")
-            }.apply {
-                assertEquals(HttpStatusCode.Created, this.response.status())
-            }
-
-            handleRequest(HttpMethod.Get, "/route/$SOME_ROUTE_ID").apply {
-                assertEquals(HttpStatusCode.OK, this.response.status())
-                assert(this.response.content?.contains("Castrodeza Ida") ?: false)
-            }
-
-            val trackId = runBlocking {
-                getTrackId()
-            }
-
-            handleRequest(HttpMethod.Delete, "/track/$trackId") {
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
-            }.apply {
-                assertEquals(HttpStatusCode.NoContent, this.response.status())
-            }
-
-            handleRequest(HttpMethod.Get, "/route/$SOME_ROUTE_ID").apply {
-                assertEquals(HttpStatusCode.OK, this.response.status())
-                assertFalse(this.response.content?.contains("Castrodeza Ida") ?: true)
-            }
-        }
-    }
-
-    @Test
-    fun `submit an invalid track`() {
-        val token = runBlocking {
-            generateToken()
-        }
+    fun `submit an invalid track`() = testApplication {
+        val token = generateToken()
         val gpxText = File("test/track/no-tracks.gpx").readText().replace("\"", "\\\"")
 
-        withTestApplication({ module(testing = true)}) {
-            handleRequest(HttpMethod.Post, "/track"){
-                addHeader(HttpHeaders.ContentType, ContentType.Application.Json.toString())
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
-                setBody("""{"name": "Castrodeza Ida", "gpx": "$gpxText"}""")
-            }.apply {
-                assertEquals(HttpStatusCode.BadRequest, this.response.status())
-            }
+        val response = client.post("/track") {
+            header(HttpHeaders.ContentType, ContentType.Application.Json.toString())
+            header(HttpHeaders.Authorization, "Bearer $token")
+            setBody("""{"name": "Castrodeza Ida", "gpx": "$gpxText"}""")
         }
+
+        assertEquals(HttpStatusCode.BadRequest, response.status)
     }
 
     @Test
-    fun `delete an existing track`() {
-        val token = runBlocking {
-            generateToken()
-        }
-        runBlocking {
-            saveRawTrack()
-        }
+    fun `delete an existing track`() = testApplication {
+        val token = generateToken()
+        saveRawTrack()
 
-        withTestApplication({module(testing = true)}) {
-            handleRequest(HttpMethod.Delete, "/track/$SOME_TRACK_ID") {
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
-            }.apply {
-                assertEquals(HttpStatusCode.NoContent, this.response.status())
-            }
-            handleRequest(HttpMethod.Get, "/track/$SOME_TRACK_ID").apply {
-                assertEquals(HttpStatusCode.NotFound, this.response.status())
-            }
+        val response = client.delete("/track/$SOME_TRACK_ID") {
+            header(HttpHeaders.Authorization, "Bearer $token")
         }
+        assertEquals(HttpStatusCode.NoContent, response.status)
+
+        val response2 = client.get("/track/$SOME_TRACK_ID")
+        assertEquals(HttpStatusCode.NotFound, response2.status)
     }
 
     @Test
-    fun `delete a track from other user`() {
-        val token = runBlocking {
-            generateToken()
-            saveRawTrack()
-            generateTokenOtherUser()
+    fun `delete a track from other user`() = testApplication {
+        generateToken()
+        saveRawTrack()
+        val token = generateTokenOtherUser()
+
+        val response = client.delete("/track/$SOME_TRACK_ID") {
+            header(HttpHeaders.Authorization, "Bearer $token")
         }
-        withTestApplication({module(testing = true)}) {
-            handleRequest(HttpMethod.Delete, "/track/$SOME_TRACK_ID") {
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
-            }.apply {
-                assertEquals(HttpStatusCode.NotFound, this.response.status())
-            }
-        }
+        assertEquals(HttpStatusCode.NotFound, response.status)
     }
 
     @Test
-    fun `get tracks of a non-existing user`() {
-        withTestApplication({module(testing = true)}) {
-            handleRequest(HttpMethod.Get, "/track?user=pepito").apply {
-                assertEquals(HttpStatusCode.OK, this.response.status())
-                assertEquals("[]", this.response.content)
-            }
-        }
+    fun `get tracks of a non-existing user`() = testApplication {
+        val response = client.get("/track?user=pepito")
+        assertEquals(HttpStatusCode.OK, response.status)
+        assertEquals("[]", response.bodyAsText())
     }
 
     @Test
-    fun `get tracks of a user`() {
-        val token = runBlocking {
-            generateToken()
-        }
-        runBlocking {
-            saveRawTrack()
-        }
+    fun `get tracks of a user`() = testApplication {
+        val token = generateToken()
+        saveRawTrack()
 
-        withTestApplication({module(testing = true)}) {
-            handleRequest(HttpMethod.Get, "/track?user=$SOME_USER_ID") {
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
-            }.apply {
-                assertEquals(HttpStatusCode.OK, this.response.status())
-                assertEquals("[{\"trackId\":\"123456\",\"name\":\"Castrodeza Ida\"}]", this.response.content)
-            }
+        val response = client.get("/track?user=$SOME_USER_ID") {
+            header(HttpHeaders.Authorization, "Bearer $token")
         }
+        assertEquals(HttpStatusCode.OK, response.status)
+        assertEquals("[{\"trackId\":\"123456\",\"name\":\"Castrodeza Ida\"}]", response.bodyAsText())
     }
 
     private suspend fun getTrackId(): String? {

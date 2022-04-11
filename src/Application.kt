@@ -1,30 +1,26 @@
 package eu.adrianistan
 
 import eu.adrianistan.config.JwtConfig
-import io.ktor.application.*
-import io.ktor.client.*
-import io.ktor.client.engine.apache.*
-import io.ktor.routing.*
+import io.ktor.server.application.*
+import io.ktor.server.routing.*
 import io.ktor.http.*
-import io.ktor.auth.*
+import io.ktor.server.auth.*
 import eu.adrianistan.controller.authRouting
 import eu.adrianistan.controller.routeRouting
 import eu.adrianistan.controller.trackRouting
 import eu.adrianistan.controller.userRouting
 import eu.adrianistan.repositories.user.UserRepository
-import io.ktor.auth.jwt.*
-import io.ktor.client.features.json.*
-import io.ktor.features.*
-import io.ktor.locations.*
-import io.ktor.serialization.*
-import io.ktor.client.features.json.serializer.KotlinxSerializer
-
+import io.ktor.server.auth.jwt.*
+import io.ktor.server.locations.*
+import io.ktor.server.plugins.contentnegotiation.*
+import io.ktor.server.plugins.cors.*
+import io.ktor.serialization.kotlinx.json.*
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
 @Suppress("unused") // Referenced in application.conf
-@kotlin.jvm.JvmOverloads
-fun Application.module(testing: Boolean = false) {
+@JvmOverloads
+fun Application.module() {
     install(Locations)
 
     val userRepository = UserRepository()
@@ -46,14 +42,14 @@ fun Application.module(testing: Boolean = false) {
     }
 
     install(CORS) {
-        method(HttpMethod.Get)
-        method(HttpMethod.Options)
-        method(HttpMethod.Post)
-        method(HttpMethod.Put)
-        method(HttpMethod.Delete)
-        method(HttpMethod.Patch)
-        header(HttpHeaders.Authorization)
-        header(HttpHeaders.ContentType)
+        allowMethod(HttpMethod.Get)
+        allowMethod(HttpMethod.Options)
+        allowMethod(HttpMethod.Post)
+        allowMethod(HttpMethod.Put)
+        allowMethod(HttpMethod.Delete)
+        allowMethod(HttpMethod.Patch)
+        allowHeader(HttpHeaders.Authorization)
+        allowHeader(HttpHeaders.ContentType)
         allowCredentials = false
         anyHost()
     }

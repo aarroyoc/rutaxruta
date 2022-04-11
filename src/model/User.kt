@@ -6,4 +6,4 @@ data class User(
     val providerId: String,
     val name: String,
     val picture: String,
-) : io.ktor.auth.Principal
+) : io.ktor.server.auth.Principal

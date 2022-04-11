@@ -10,12 +10,12 @@ import eu.adrianistan.model.User
 import eu.adrianistan.repositories.poi.PoiRepository
 import eu.adrianistan.repositories.route.RouteRepository
 import eu.adrianistan.features.GetPoisNearRoute
-import io.ktor.application.*
-import io.ktor.auth.*
+import io.ktor.server.application.*
+import io.ktor.server.auth.*
 import io.ktor.http.*
-import io.ktor.request.*
-import io.ktor.response.*
-import io.ktor.routing.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 
 fun Route.routeRouting() {
     val routeRepository = RouteRepository()
