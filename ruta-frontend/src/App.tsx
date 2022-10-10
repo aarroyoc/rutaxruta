@@ -23,6 +23,7 @@ function App() {
   const location = useLocation();
 
   const handleLogin = async (googleData: any) => {
+    console.log(googleData);
     const jwt = await apiService.getToken(googleData.tokenId);
     apiService.setJwt(jwt);
     const newUser = await apiService.getMe();
