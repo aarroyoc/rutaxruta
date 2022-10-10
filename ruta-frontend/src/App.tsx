@@ -24,7 +24,7 @@ function App() {
 
   const handleLogin = async (googleData: any) => {
     console.log(googleData);
-    const jwt = await apiService.getToken(googleData.tokenId);
+    const jwt = await apiService.getToken(googleData.credential);
     apiService.setJwt(jwt);
     const newUser = await apiService.getMe();
     setUser(newUser);
