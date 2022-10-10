@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Dialog, DialogFooter, Link, PrimaryButton } from '@fluentui/react';
-import GoogleLogin from 'react-google-login';
 import { Switch, Route, useHistory, useLocation } from "react-router-dom";
+import { GoogleLogin } from '@react-oauth/google';
 
 import { ApiService } from './services/ApiService';
 import User from './models/User';
@@ -41,11 +41,10 @@ function App() {
         <nav className="App-header-user">
           {user === null && 
           <GoogleLogin
-            clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID || ""}
-            buttonText="Iniciar sesión"
             onSuccess={handleLogin}
-            onFailure={handleLogin}
-            cookiePolicy={"single_host_origin"}
+            onError={() => {
+              console.log("Login failed!")
+            }}
             />
           }
           {user !== null && <div className="username">

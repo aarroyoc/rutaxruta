@@ -5,6 +5,7 @@ import './index.css';
 import App from './App';
 import { BrowserRouter } from 'react-router-dom';
 import { initializeIcons } from '@fluentui/font-icons-mdl2';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 initializeIcons();
 
@@ -37,9 +38,11 @@ const theme: PartialTheme = {
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID || ""}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </GoogleOAuthProvider>
     </ThemeProvider>
   </React.StrictMode>,
   document.getElementById('root')
