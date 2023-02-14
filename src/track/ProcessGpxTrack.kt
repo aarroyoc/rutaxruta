@@ -79,7 +79,7 @@ class ProcessGpxTrack {
             user = user,
             segments = lines,
             maxSpeed = lines.map { it.speed }.percentile(99.0),
-            minSpeed = lines.map { it.speed }.minOrNull() ?: 0.0,
+            minSpeed = lines.minOfOrNull { it.speed } ?: 0.0,
             duration = duration,
             distance = distance.toLong(),
             meanSpeed = meanSpeed,
