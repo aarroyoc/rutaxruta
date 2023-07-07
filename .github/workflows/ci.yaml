@@ -12,10 +12,9 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
-      - name: Set up MongoDB
-        run: make setup-ci
-      - name: Build with Maven
-        run: mvn -B package --file pom.xml
+      - uses: extractions/setup-just@v1          
+      - name: Test
+        run: just
       - name: Set up Node.js 16
         uses: actions/setup-node@v2
         with:
@@ -26,5 +25,3 @@ jobs:
       - name: Build ruta-frontend
         working-directory: ruta-frontend
         run: npm run build
-      - name: Close MongoDB
-        run: make exit-ci
