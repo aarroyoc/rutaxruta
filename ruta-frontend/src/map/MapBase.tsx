@@ -25,7 +25,7 @@ function MapBase({bounds, children}: Props){
         <div className="mapBase">
             <MapContainer boxZoom bounds={bounds} scrollWheelZoom={true} className="mapContainer">
                 { wms === "ign" && <WMSTileLayer url="https://www.ign.es/wms-inspire/mapa-raster" format="image/png" crs={CRS.EPSG4326} tileSize={256} layers="mtn_rasterizado" attribution="© Instituto Geográfico Nacional"/> }
-                { wms === "itacyl" && <WMSTileLayer url="http://orto.wms.itacyl.es/WMS?" format="image/jpeg" crs={CRS.EPSG4326} tileSize={256} layers="Ortofoto_2017" attribution="© ITaCyL. Junta de Castilla y León"/>}
+                { wms === "itacyl" && <WMSTileLayer url="http://orto.wms.itacyl.es/WMS?" format="image/jpeg" crs={CRS.EPSG4326} tileSize={256} layers="Ortofoto_CyL" attribution="© ITaCyL. Junta de Castilla y León"/>}
                 {children}
             </MapContainer>
             <div className="mapChoice">
