@@ -7,7 +7,7 @@
     <name>rutaxruta</name>
     <description>rutaxruta</description>
     <properties>
-        <logback_version>1.4.11</logback_version>
+        <logback_version>1.4.12</logback_version>
         <ktor_version>2.3.6</ktor_version>
         <kotlin.code.style>official</kotlin.code.style>
         <kotlin_version>1.9.20</kotlin_version>
