@@ -3,20 +3,20 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.adrianistan</groupId>
     <artifactId>rutaxruta</artifactId>
-    <version>1.0.3-SNAPSHOT</version>
+    <version>1.0.4-SNAPSHOT</version>
     <name>rutaxruta</name>
     <description>rutaxruta</description>
     <properties>
-        <logback_version>1.4.12</logback_version>
-        <ktor_version>2.3.6</ktor_version>
+        <logback_version>1.5.12</logback_version>
+        <ktor_version>2.3.12</ktor_version>
         <kotlin.code.style>official</kotlin.code.style>
-        <kotlin_version>1.9.23</kotlin_version>
-        <serialization.version>1.6.1</serialization.version>
-        <datetime.version>0.4.1</datetime.version>
+        <kotlin_version>2.0.20</kotlin_version>
+        <serialization.version>1.7.3</serialization.version>
+        <datetime.version>0.6.1</datetime.version>
         <jts.version>1.18.2</jts.version>
         <jpx_version>2.3.0</jpx_version>
-        <kmongo_version>4.11.0</kmongo_version>
-        <google_version>1.35.0</google_version>
+        <kmongo_version>5.1.0</kmongo_version>
+        <google_version>2.7.0</google_version>
         <kotlin_statistics>1.2.1</kotlin_statistics>
         <mockk_version>1.13.8</mockk_version>
 	<junit-jupiter_version>5.10.1</junit-jupiter_version>
@@ -212,7 +212,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <configuration><source>17</source><target>17</target></configuration>
+                <configuration><source>21</source><target>21</target></configuration>
                 <version>3.11.0</version>
             </plugin>
             <plugin>
